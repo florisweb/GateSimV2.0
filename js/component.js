@@ -16,12 +16,6 @@ class NandGate {
 	];
 }
 
-
-
-
-
-
-
 class NandOutputNode extends Node {
 	value = false;
 	name = 'NandOutput';
@@ -32,7 +26,6 @@ class NandOutputNode extends Node {
 		this.value = !(this.parent.inputs[0].value && this.parent.inputs[1].value);
 		return this.value;
 	}
-
 }
 
 class NandInputNode extends Node {
@@ -70,28 +63,6 @@ class NandInputNode extends Node {
 
 
 
-
-
-
-
-
-
-
-
-class Line {
-	get value() {
-		return this.fromNode.value;
-	}
-	fromNode;
-	toNode;
-	constructor(from, to) {
-		this.fromNode = from;
-		this.toNode = to;
-		this.fromNode.linesFrom.push(this);
-		this.toNode.linesTo.push(this);
-		World.lines.push(this);
-	}
-}
 
 
 

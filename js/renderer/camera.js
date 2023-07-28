@@ -1,3 +1,5 @@
+
+
 class _Camera {
 	viewsize = new Vector(800, 600);
 	position = new Vector(0, 0);
@@ -5,11 +7,6 @@ class _Camera {
 	#zoom = 1;	
 	#minZoom = .1;
 	#maxZoom = Infinity;
-
-	constructor() {
-		this.position = World.size.copy(0).scale(.5);
-	}
-
 
 	get zoom() {
 		return this.#zoom;
@@ -19,6 +16,11 @@ class _Camera {
 		this.#zoom = Math.min(Math.max(_zoom, this.#minZoom), this.#maxZoom);
 	}
 
+
+	constructor() {
+		this.position = World.size.copy(0).scale(.5);
+	}
+	
 
 	getWorldProjectionSize() {
 		return this.viewsize.copy().scale(this.zoom);
