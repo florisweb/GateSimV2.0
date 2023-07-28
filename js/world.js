@@ -1,4 +1,6 @@
 
+let Renderer;
+
 const World = new class {
 
 	size = new Vector(950, 950);
@@ -12,6 +14,15 @@ const World = new class {
 
 
 	async setup() {
+		Renderer = new _Renderer();
+		Renderer.setup();
+
+
+
+
+
+
+
 		const startNode = new InputNode();
 		this.inputs.push(startNode);
 		startNode.name = 'Start';

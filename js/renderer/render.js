@@ -1,12 +1,15 @@
 
-const Renderer = new class {
+class _Renderer {
 	canvas = canvas;
 	#ctx;
+	camera;
 	constructor() {
 		this.#ctx = this.canvas.getContext('2d');
+		this.camera = new _Camera();
 	}
-
-
+	setup() {
+		window.onresize();
+	}
 
 
 	render() {
@@ -15,6 +18,9 @@ const Renderer = new class {
 		this.renderNodes();
 		requestAnimationFrame(() => this.render());
 	}
+
+
+	
 
 	renderNodes() {
 		for (let node of World.nodes)
@@ -52,12 +58,15 @@ const Renderer = new class {
 		if (fillColor) this.#ctx.fillStyle = fillColor;
 		if (strokeColor) this.#ctx.strokeStyle = strokeColor;
 
+		let canvPos = this.camera.worldPosToCanvPos(position);
+		let canvRadius = radius / this.camera.zoom;
+
 		this.#ctx.beginPath();
 		this.#ctx.ellipse(
-			position.value[0],
-			position.value[1],
-			radius,
-			radius,
+			canvPos.value[0],
+			canvPos.value[1],
+			canvRadius,
+			canvRadius,
 			0,
 			0,
 			2 * Math.PI
@@ -70,9 +79,12 @@ const Renderer = new class {
 
 	#drawLine({start, end, color}) {
 		if (color) this.#ctx.strokeStyle = color;
+		let startPos = this.camera.worldPosToCanvPos(start);
+		let endPos = this.camera.worldPosToCanvPos(end);
+
 		this.#ctx.beginPath();
-		this.#ctx.moveTo(start.value[0], start.value[1])
-		this.#ctx.lineTo(end.value[0], end.value[1])
+		this.#ctx.moveTo(startPos.value[0], startPos.value[1])
+		this.#ctx.lineTo(endPos.value[0], endPos.value[1])
 		this.#ctx.closePath()
 		if (color) this.#ctx.stroke();
 	}
@@ -89,12 +101,26 @@ const Renderer = new class {
 	#drawText({text, position, fontSize, color, alignRight = false}) {
 		this.#ctx.textBaseline = 'middle';
 		if (alignRight) ctx.textAlign = 'end';
+		let canvPos = this.camera.worldPosToCanvPos(position);
+		let canvFontSize = fontSize / this.camera.zoom;
 
 		this.#ctx.fillStyle = color;
-		this.#ctx.font = fontSize + "px Arial";
+		this.#ctx.font = canvFontSize + "px Arial";
 		this.#ctx.beginPath();
-		this.#ctx.fillText(text, position.value[0], position.value[1]);
+		this.#ctx.fillText(text, canvPos.value[0], canvPos.value[1]);
 		this.#ctx.closePath();
 		this.#ctx.fill();		
 	}
 }
+
+
+
+
+
+
+window.onresize = function() {
+	Renderer.canvas.width = Renderer.canvas.offsetWidth;
+	Renderer.canvas.height = Renderer.canvas.offsetHeight;
+	Renderer.camera.onResize();
+}
+
