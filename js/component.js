@@ -27,8 +27,8 @@ class BaseComponent {
 			id: this.id,
 			type: this.type,
 			relativePosition: this.relativePosition.value,
-			inputCount: this.inputs.length,
-			outputCount: this.outputs.length,
+			inputs: this.inputs.map(inp => {name: inp.name}),
+			outputs: this.outputs.map(out => {name: out.name}),
 		}
 	}
 }
@@ -40,11 +40,10 @@ class Component extends BaseComponent {
 	type = 'CustomComponent';
 	content = [];
 
-	constructor({relPos, content, inputCount, outputCount} = {relPos: new Vector(0, 0), content: [], inputCount: 0, outputCount: 0}, _parent) {
+	constructor({relPos, content, inputs, outputs} = {relPos: new Vector(0, 0), content: [], inputs: [], outputs: []}, _parent) {
 		super(...arguments);
-		for (let i = 0; i < inputCount; i++) this.inputs.push(new InputNode({index: i}, this));
-		for (let i = 0; i < outputCount; i++) this.outputs.push(new OutputNode({index: i}, this));
-
+		for (let i = 0; i < inputs.length; i++) this.inputs.push(new InputNode({index: i, name: inputs[i].name}, this));
+		for (let i = 0; i < outputs.length; i++) this.outputs.push(new OutputNode({index: i, name: outputs[i].name}, this));
 		this.content = content;
 	}
 

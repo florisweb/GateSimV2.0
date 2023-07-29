@@ -25,8 +25,9 @@ class Node {
 	}
 
 
-	constructor({index}, _parent) {
+	constructor({index, name}, _parent) {
 		this.index = index;
+		this.name = name;
 		this.parent = _parent;
 		World.nodes.push(this);
 	}

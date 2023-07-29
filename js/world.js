@@ -34,8 +34,8 @@ const World = new class {
 
 		const nandGate = new NandGate();
 		this.component = new WorldComponent({
-			inputCount: 1,
-			outputCount: 1,
+			inputs: [{name: 'input 1'}],
+			outputs: [{name: 'output 1'}],
 			content: [
 				nandGate,
 				// new Line(startNode, nandGate.inputs[0]),
