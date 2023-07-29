@@ -15,10 +15,13 @@ class BaseComponent {
 	inputs = [];
 	outputs = [];
 
-	constructor({relPos, id} = {}, _parent) {
-		this.parent = _parent;
-		if (relPos) this.relativePosition = relPos;
+	constructor({relativePosition, id} = {}) {
+		if (relativePosition) this.relativePosition = relativePosition;
 		if (id) this.id = id;
+	}
+
+	setParent(_parent) {
+		this.parent = _parent;
 	}
 
 
@@ -27,9 +30,17 @@ class BaseComponent {
 			id: this.id,
 			type: this.type,
 			relativePosition: this.relativePosition.value,
-			inputs: this.inputs.map(inp => {name: inp.name}),
-			outputs: this.outputs.map(out => {name: out.name}),
+			inputs: this.inputs.map((inp) => {return {name: inp.name}}),
+			outputs: this.outputs.map((out) => {return {name: out.name}}),
 		}
+	}
+
+	_getNodeByLocalNodeId(_localNodeId) {
+		let isInput = _localNodeId.substr(0, 2) === "IN";
+		let index = isInput ? parseInt(_localNodeId.substr(2, 1000)) : parseInt(_localNodeId.substr(3, 1000));
+
+		if (isInput) return this.inputs[index];
+		return this.outputs[index];
 	}
 }
 
@@ -38,12 +49,14 @@ class BaseComponent {
 
 class Component extends BaseComponent {
 	type = 'CustomComponent';
+	componentId;
 	content = [];
 
-	constructor({relPos, content, inputs, outputs} = {relPos: new Vector(0, 0), content: [], inputs: [], outputs: []}, _parent) {
+	constructor({id, componentId, relativePosition, content, inputs, outputs} = {relativePosition: new Vector(0, 0), content: [], inputs: [], outputs: []}) {
 		super(...arguments);
 		this._createInputs({inputs: inputs, outputs: outputs})
 		this.content = content;
+		this.componentId = componentId;
 	}
 
 	_createInputs({inputs, outputs}) {
@@ -54,9 +67,24 @@ class Component extends BaseComponent {
 
 	serialize() {
 		let base = super.serialize();
+		base.componentId = this.componentId;
 		let content = this.content.map(c => c.serialize());
 		base.content = content;
 		return base;
+	}
+
+	getNodeById(_nodeId) {
+		let [parentId, localNodeId] = _nodeId.split('|');
+		if (parentId === this.id)
+		{
+			return this._getNodeByLocalNodeId(localNodeId);
+		}
+
+		for (let comp of this.content)
+		{
+			if (comp.id !== parentId) continue;
+			return comp._getNodeByLocalNodeId(localNodeId);
+		}
 	}
 }
 
@@ -73,11 +101,33 @@ class Component extends BaseComponent {
 
 
 
+class WorldComponent extends Component {
+	type = 'WorldComponent';
+	get size() {
+		return World.size;
+	}
 
+	_createInputs({inputs, outputs}) {
+		for (let i = 0; i < inputs.length; i++) this.inputs.push(new WorldInputNode({index: i, name: inputs[i].name}, this));
+		for (let i = 0; i < outputs.length; i++) this.outputs.push(new WorldOutputNode({index: i, name: outputs[i].name}, this));
+	}
+
+	setFromComponent(_component) {
+		for (let key in _component)
+		{
+			this[key] = _component[key];
+		}
+		for (let child of this.content) 
+		{
+			if (child.type !== 'line') continue;
+			child.setParent(this);
+		}
+	}
+}
 
 
 class NandGate extends BaseComponent {
-	type = 'NAND';
+	type = 'Nand';
 	size = new Vector(100, 120);
 	inputs = [
 		new NandInputNode({index: 0}, this),
@@ -87,9 +137,10 @@ class NandGate extends BaseComponent {
 		new NandOutputNode({index: 0}, this)
 	];
 
-	constructor() {
+	constructor({id} = {}) {
 		super({
-			relPos: new Vector(
+			id: id,
+			relativePosition: new Vector(
 				.5 * World.size.value[0],
 				.5 * World.size.value[1]
 			)
@@ -100,17 +151,9 @@ class NandGate extends BaseComponent {
 
 
 
-
-
-
-
-
-
-
-
 class NandOutputNode extends OutputNode {
 	value = false;
-	name = 'NandOutput';
+	name = 'NandIN';
 	calcValue() {
 		this.value = !(this.parent.inputs[0].value && this.parent.inputs[1].value);
 		return this.value;
@@ -120,10 +163,8 @@ class NandOutputNode extends OutputNode {
 class NandInputNode extends InputNode {
 	constructor() {
 		super(...arguments);
-		wait(0).then(() => this.name = 'NandInput ' + (this.parent.inputs[0] === this ? 'A' : 'B'));
+		wait(0).then(() => this.name = 'NandOUT ' + (this.parent.inputs[0] === this ? 'A' : 'B'));
 	}
-
-
 	evaluatePaths(_evalStrand = []) {
 		super.evaluatePaths(_evalStrand);
 		this.parent.outputs[0].evaluatePaths(_evalStrand);

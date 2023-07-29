@@ -1,19 +1,8 @@
 
 let Renderer;
 let InputHandler;
+let ComponentManager;
 
-
-class WorldComponent extends Component {
-	type = 'WorldComponent';
-	get size() {
-		return World.size;
-	}
-
-	_createInputs({inputs, outputs}) {
-		for (let i = 0; i < inputs.length; i++) this.inputs.push(new WorldInputNode({index: i, name: inputs[i].name}, this));
-		for (let i = 0; i < outputs.length; i++) this.outputs.push(new WorldOutputNode({index: i, name: outputs[i].name}, this));
-	}
-}
 
 
 
@@ -30,6 +19,7 @@ const World = new class {
 	component = new WorldComponent();
 
 	async setup() {
+		ComponentManager = new _ComponentManager();
 		Renderer = new _Renderer();
 		InputHandler = new _InputHandler({canvas: Renderer.canvas});
 		Renderer.setup();

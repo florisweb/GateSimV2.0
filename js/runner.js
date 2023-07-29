@@ -4,7 +4,7 @@ const Runner = new class {
 	nodes = [];
 	paths = [];
 
-	logRunStats = true;
+	logRunStats = false;
 	logRunTrace = false;
 
 

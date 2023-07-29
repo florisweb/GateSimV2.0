@@ -19,7 +19,7 @@ class _Renderer {
 	render() {
 		this.#ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
 
-		this.renderWorldNodes();
+		World.component.content.sort((a, b) => a instanceof Line ? 1 : b instanceof Line ? -1 : 0);
 		for (let item of World.component.content)
 		{
 			if (item instanceof NandGate || item instanceof Component)
@@ -30,7 +30,7 @@ class _Renderer {
 				this.renderLine(item);
 			}
 		}
-
+		this.renderWorldNodes();
 
 		requestAnimationFrame(() => this.render());
 	}
