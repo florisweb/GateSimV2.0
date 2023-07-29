@@ -5,11 +5,24 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<title></title>
 	<style>
-		html, body {
-			margin: 0;
-			padding: 0;
+		* {
+			box-sizing: border-box;
 		}
+		
+		html, body {
+		    font-family: "Lucida Sans Unicode", "Lucida Grande", sans-serif;
+		    position: fixed;
+		    width: 100vw;
+		    height: 100vh;
+		    margin: 0;
+		    padding: 0;
+		    overflow: hidden;
+		}
+
 		#canvas {
+			position: relative;
+			top: 0;
+			left: 0;
 			background: #555;
 			width: 100vw;
 			height: 100vh;
@@ -17,7 +30,6 @@
 	</style>
 </head>
 <body>
-
 	<canvas id='canvas' width="1000" height="1000"> 
 	</canvas>
 
@@ -28,6 +40,7 @@
 	<script src='js/extraFunctions.js'></script>
 	<script src='js/renderer/camera.js'></script>
 	<script src='js/renderer/render.js'></script>
+	<script src='js/inputHandler.js'></script>
 	<script src='js/node.js'></script>
 	<script src='js/component.js'></script>
 	<script src='js/runner.js'></script>

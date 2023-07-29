@@ -1,5 +1,6 @@
 
 let Renderer;
+let InputHandler;
 
 
 class WorldComponent extends Component {
@@ -8,9 +9,6 @@ class WorldComponent extends Component {
 		return World.size;
 	}
 }
-
-
-
 
 
 
@@ -28,6 +26,7 @@ const World = new class {
 
 	async setup() {
 		Renderer = new _Renderer();
+		InputHandler = new _InputHandler({canvas: Renderer.canvas});
 		Renderer.setup();
 
 
