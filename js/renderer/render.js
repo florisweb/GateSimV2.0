@@ -1,5 +1,9 @@
 
 class _Renderer {
+	NodeSize = 15;
+
+
+
 	canvas = canvas;
 	#ctx;
 	camera;
@@ -14,42 +18,63 @@ class _Renderer {
 
 	render() {
 		this.#ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
-		this.renderLines();
-		this.renderNodes();
+
+		this.renderWorldNodes();
+		for (let item of World.component.content)
+		{
+			if (item instanceof NandGate || item instanceof Component)
+			{
+				this.renderComponent(item);
+			} else if (item instanceof Line) 
+			{
+				this.renderLine(item);
+			}
+		}
+
+
 		requestAnimationFrame(() => this.render());
 	}
 
 
-	
-
-	renderNodes() {
-		for (let node of World.nodes)
-		{
-			this.#drawCircle({
-				position: node.position,
-				radius: 20, 
-				fillColor: node.value ? '#f00' : '#333',
-				strokeColor: '#aaa'
-			});
-			this.#drawCenteredText({
-				text: node.name,
-				position: node.position.copy().add(new Vector(0, 30)),
-				color: '#eee',
-				fontSize: 15
-			})
-		}
+	renderWorldNodes() {
+		let nodes = [...World.component.inputs, ...World.component.outputs]
+		for (let node of nodes) this.renderNode(node);
 	}	
 
 
-	renderLines() {
-		for (let line of World.lines)
-		{
-			this.#drawTraceLine({
-				start: line.fromNode.position,
-				end: line.toNode.position,
-				color: line.value ? '#f00' : '#ccc',
-			});
-		}
+	renderLine(_line) {
+		this.#drawTraceLine({
+			start: _line.fromNode.position,
+			end: _line.toNode.position,
+			color: _line.value ? '#f00' : '#ccc',
+		});
+	}
+
+	renderComponent(_comp) {
+		this.#drawRect({
+			position: _comp.position,
+			diagonal: _comp.size,
+			fillColor: '#333',
+			strokeColor: '#777'
+		});
+
+		let nodes = [..._comp.inputs, ..._comp.outputs]
+		for (let node of nodes) this.renderNode(node);
+	}
+
+	renderNode(_node) {
+		this.#drawCircle({
+			position: _node.position,
+			radius: this.NodeSize, 
+			fillColor: _node.value ? '#f00' : '#333',
+			strokeColor: '#aaa'
+		});
+		this.#drawCenteredText({
+			text: _node.name,
+			position: _node.position.copy().add(new Vector(0, this.NodeSize * 1.5)),
+			color: '#eee',
+			fontSize: 15
+		})
 	}
 
 
@@ -70,6 +95,27 @@ class _Renderer {
 			0,
 			0,
 			2 * Math.PI
+		);
+		this.#ctx.closePath();
+
+		if (fillColor) this.#ctx.fill();
+		if (strokeColor) this.#ctx.stroke();
+	}
+
+	#drawRect({position, diagonal, fillColor, strokeColor}) {
+		if (fillColor) this.#ctx.fillStyle = fillColor;
+		if (strokeColor) this.#ctx.strokeStyle = strokeColor;
+
+		let canvStartPos = this.camera.worldPosToCanvPos(position);
+		let canvEndPos = this.camera.worldPosToCanvPos(position.copy().add(diagonal));
+		let delta = canvStartPos.difference(canvEndPos);
+
+		this.#ctx.beginPath();
+		this.#ctx.rect(
+			canvStartPos.value[0],
+			canvStartPos.value[1],
+			delta.value[0],
+			delta.value[1]
 		);
 		this.#ctx.closePath();
 
@@ -106,20 +152,32 @@ class _Renderer {
 
 
 		let subPos = start.copy().add(new Vector(a, 0));
-		this.#drawLine({start: start, end: subPos, color: color});
-
 		let subPos2 = subPos.copy().add(new Vector(bx, by));
-		this.#drawLine({start: subPos, end: subPos2, color: color});
-
 		let subPos3 = subPos2.copy().add(new Vector(0, c));
-		this.#drawLine({start: subPos2, end: subPos3, color: color});
-
 		let subPos4 = subPos3.copy().add(new Vector(bx, by));
-		this.#drawLine({start: subPos3, end: subPos4, color: color});
-
 		let subPos5 = subPos4.copy().add(new Vector(a, 0));
-		this.#drawLine({start: subPos4, end: subPos5, color: color});
+
+		let points = [
+			start,
+			subPos,
+			subPos2,
+			subPos3,
+			subPos4,
+			subPos5
+		];
+
+		let canvPoints = points.map(p => this.camera.worldPosToCanvPos(p));
+		if (color) this.#ctx.strokeStyle = color;
+
+		this.#ctx.beginPath();
+		this.#ctx.moveTo(canvPoints[0].value[0], canvPoints[0].value[1]);
+		for (let i = 1; i < canvPoints.length; i++)
+		{
+			this.#ctx.lineTo(canvPoints[i].value[0], canvPoints[i].value[1])
+		}
+		if (color) this.#ctx.stroke();
 	}
+
 
 
 
