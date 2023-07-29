@@ -1,20 +1,88 @@
 
+class BaseComponent {
+	parent;
+	relativePosition = new Vector(0, 0);
+	size = new Vector(100, 100);
+
+
+	get position() {
+		if (this.parent) return this.parent.position.copy().add(this.relativePosition);
+		return this.relativePosition.copy();
+	}
+
+	inputs = [];
+	outputs = [];
+
+	constructor({relPos}, _parent) {
+		this.parent = _parent;
+		this.relativePosition = relPos;
+	}
+}
 
 
 
-class NandGate {
-	position = new Vector(
-		.5 * World.size.value[0],
-		.5 * World.size.value[1]
-	);
+
+class Component {
+
+
+	constructor({relPos, content, inputCount, outputCount}, _parent) {
+
+
+
+
+	}
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+class NandGate extends BaseComponent {
 	inputs = [
-		new NandInputNode(this),
-		new NandInputNode(this),
+		new NandInputNode({index: 0}, this),
+		new NandInputNode({index: 1}, this),
 	];
 	outputs = [
-		new NandOutputNode(this)
+		new NandOutputNode({index: 0}, this)
 	];
+
+	constructor() {
+		super({
+			relPos: new Vector(
+				.5 * World.size.value[0],
+				.5 * World.size.value[1]
+			)
+		})
+
+	}
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 class NandOutputNode extends Node {
 	value = false;

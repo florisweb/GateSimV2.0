@@ -61,7 +61,7 @@ const Runner = new class {
 				let newValue = node.calcValue();
 																											if (this.logRunTrace) console.log(node.name + ':', prevValue + ' -> ' + newValue, path.map(r => r.name));
 
-				if (newValue !== prevValue || node instanceof InputNode || _runEverything) continue;
+				if (newValue !== prevValue || node instanceof WorldInputNode || _runEverything) continue;
 																											if (this.logRunTrace) console.log('[NO CHANGE]: Remove following paths:');
 				// If the node's value does not change neither will the values of the nodes that are dependant on it: so remove all paths with this node at this position
 				for (let path2 of this.#curPaths)

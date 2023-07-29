@@ -3,14 +3,13 @@
 
 class Node {
 	parent;
+	index = 0;
 	name;
 	linesTo = [];
 	linesFrom = [];
 
-
-	_position = new Vector(0, 0);
 	get position() {
-		return this._position;
+		return new Vector(0, 0);
 	}
 
 	value = false;
@@ -20,7 +19,8 @@ class Node {
 	}
 
 
-	constructor(_parent, _position) {
+	constructor({index}, _parent) {
+		this.index = index;
 		this.parent = _parent;
 		World.nodes.push(this);
 	}
@@ -51,22 +51,52 @@ class Node {
 
 
 class InputNode extends Node {
-	value = true;
-	calcValue() {return this.value}
+	isInput = true;
+	get position() {
+		let relVector = new Vector(
+			0, 
+			this.index * 50,
+		);
+		return this.parent.position.copy().add(relVector);
+	}
+}
 
-	constructor() {
-		super();
-		this._position.value[0] = 50;
-		this._position.value[1] = Math.random() * World.size.value[1];
+class OutputNode extends Node {
+	isOutput = true;
+	get position() {
+		let relVector = new Vector(
+			this.parent.size.value[0], 
+			this.index * 50,
+		);
+		if (this.parent) return this.parent.position.copy().add(relVector);
+		return relVector;
 	}
 }
 
 
-class OutputNode extends Node {
-	constructor() {
-		super();
-		this._position.value[0] = World.size.value[0];
-		this._position.value[1] = Math.random() * World.size.value[1];
+
+
+
+
+class WorldInputNode extends InputNode {
+	get position() {
+		return new Vector(
+			50, 
+			Math.random() * World.size.value[1]
+		);
+	}
+
+	value = true;
+	calcValue() {return this.value}
+}
+
+
+class WorldOutputNode extends OutputNode {
+	get position() {
+		return new Vector(
+			World.size.value[0], 
+			Math.random() * World.size.value[1]
+		);
 	}
 }
 

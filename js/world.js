@@ -20,13 +20,10 @@ const World = new class {
 
 
 
-
-
-
-		const startNode = new InputNode();
+		const startNode = new WorldInputNode({index: 0}, this);
 		this.inputs.push(startNode);
 		startNode.name = 'Start';
-		const finishNode = new OutputNode();
+		const finishNode = new WorldOutputNode({index: 0}, this);
 		this.outputs.push(startNode);
 		finishNode.name = 'Finish';
 		
