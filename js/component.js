@@ -42,10 +42,15 @@ class Component extends BaseComponent {
 
 	constructor({relPos, content, inputs, outputs} = {relPos: new Vector(0, 0), content: [], inputs: [], outputs: []}, _parent) {
 		super(...arguments);
-		for (let i = 0; i < inputs.length; i++) this.inputs.push(new InputNode({index: i, name: inputs[i].name}, this));
-		for (let i = 0; i < outputs.length; i++) this.outputs.push(new OutputNode({index: i, name: outputs[i].name}, this));
+		this._createInputs({inputs: inputs, outputs: outputs})
 		this.content = content;
 	}
+
+	_createInputs({inputs, outputs}) {
+		for (let i = 0; i < inputs.length; i++) this.inputs.push(new InputNode({index: i, name: inputs[i].name}, this));
+		for (let i = 0; i < outputs.length; i++) this.outputs.push(new OutputNode({index: i, name: outputs[i].name}, this));
+	}
+
 
 	serialize() {
 		let base = super.serialize();
@@ -73,6 +78,7 @@ class Component extends BaseComponent {
 
 class NandGate extends BaseComponent {
 	type = 'NAND';
+	size = new Vector(100, 120);
 	inputs = [
 		new NandInputNode({index: 0}, this),
 		new NandInputNode({index: 1}, this),
@@ -102,28 +108,16 @@ class NandGate extends BaseComponent {
 
 
 
-
-
-
-
-class NandOutputNode extends Node {
+class NandOutputNode extends OutputNode {
 	value = false;
 	name = 'NandOutput';
-	get position() {
-		return this.parent.position.copy().add(new Vector(30, 0));
-	}
 	calcValue() {
 		this.value = !(this.parent.inputs[0].value && this.parent.inputs[1].value);
 		return this.value;
 	}
 }
 
-class NandInputNode extends Node {
-	get position() {
-		let isFirstInput = this.parent.inputs[0] === this;
-		return this.parent.position.copy().add(new Vector(-30, isFirstInput ? -50 : 50));
-	}
-
+class NandInputNode extends InputNode {
 	constructor() {
 		super(...arguments);
 		wait(0).then(() => this.name = 'NandInput ' + (this.parent.inputs[0] === this ? 'A' : 'B'));

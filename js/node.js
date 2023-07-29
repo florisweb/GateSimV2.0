@@ -60,9 +60,11 @@ class Node {
 class InputNode extends Node {
 	isInput = true;
 	get position() {
+		let sisterNodeCount = this.parent.inputs.length;
+		let deltaFromCenter = this.index - (sisterNodeCount - 1) / 2;
 		let relVector = new Vector(
 			0, 
-			this.index * 50,
+			this.parent.size.value[1] / 2 + deltaFromCenter * 70,
 		);
 		return this.parent.position.copy().add(relVector);
 	}
@@ -71,9 +73,12 @@ class InputNode extends Node {
 class OutputNode extends Node {
 	isOutput = true;
 	get position() {
+		let sisterNodeCount = this.parent.outputs.length;
+		let deltaFromCenter = this.index - (sisterNodeCount - 1) / 2;
+
 		let relVector = new Vector(
 			this.parent.size.value[0], 
-			this.index * 50,
+			this.parent.size.value[1] / 2 + deltaFromCenter * 70,
 		);
 		if (this.parent) return this.parent.position.copy().add(relVector);
 		return relVector;

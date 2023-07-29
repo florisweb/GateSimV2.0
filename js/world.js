@@ -8,6 +8,11 @@ class WorldComponent extends Component {
 	get size() {
 		return World.size;
 	}
+
+	_createInputs({inputs, outputs}) {
+		for (let i = 0; i < inputs.length; i++) this.inputs.push(new WorldInputNode({index: i, name: inputs[i].name}, this));
+		for (let i = 0; i < outputs.length; i++) this.outputs.push(new WorldOutputNode({index: i, name: outputs[i].name}, this));
+	}
 }
 
 
@@ -43,6 +48,8 @@ const World = new class {
 			]
 		});
 
+		let line = new Line(this.component.inputs[0], nandGate.inputs[0]);
+		this.component.content.push(line);
 
 
 
