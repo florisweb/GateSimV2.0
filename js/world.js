@@ -48,8 +48,12 @@ const World = new class {
 			]
 		});
 
-		let line = new Line(this.component.inputs[0], nandGate.inputs[0]);
-		this.component.content.push(line);
+		let line1 = new Line(this.component.inputs[0], nandGate.inputs[0]);
+		this.component.content.push(line1);
+		let line2 = new Line(nandGate.outputs[0], this.component.outputs[0]);
+		this.component.content.push(line2);
+		let line3 = new Line(nandGate.outputs[0], nandGate.inputs[1]);
+		this.component.content.push(line3);
 
 
 

@@ -96,19 +96,25 @@ class _Renderer {
 		let dy = end.value[1] - start.value[1];
 
 		let b = .1 * dx;
-		let a = dx / 2 - .5 * Math.sqrt(2) * b;
-		let c = dy - Math.sqrt(2) * b;
+		let bx = .5 * Math.sqrt(2) * b;
+		let yModifier = (dy < 0 ? -1 : 1);
+		if (dx < 0) yModifier *= -1;
+		let by = .5 * Math.sqrt(2) * b * yModifier;
+		
+		let a = (dx - bx * 2) / 2;
+		let c = (dy - by * 2);
+
 
 		let subPos = start.copy().add(new Vector(a, 0));
 		this.#drawLine({start: start, end: subPos, color: color});
 
-		let subPos2 = subPos.copy().add(new Vector(.5 * Math.sqrt(2) * b, .5 * Math.sqrt(2) * b));
+		let subPos2 = subPos.copy().add(new Vector(bx, by));
 		this.#drawLine({start: subPos, end: subPos2, color: color});
 
 		let subPos3 = subPos2.copy().add(new Vector(0, c));
 		this.#drawLine({start: subPos2, end: subPos3, color: color});
 
-		let subPos4 = subPos3.copy().add(new Vector(.5 * Math.sqrt(2) * b, .5 * Math.sqrt(2) * b));
+		let subPos4 = subPos3.copy().add(new Vector(bx, by));
 		this.#drawLine({start: subPos3, end: subPos4, color: color});
 
 		let subPos5 = subPos4.copy().add(new Vector(a, 0));
