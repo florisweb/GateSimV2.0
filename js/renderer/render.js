@@ -44,7 +44,7 @@ class _Renderer {
 	renderLines() {
 		for (let line of World.lines)
 		{
-			this.#drawLine({
+			this.#drawTraceLine({
 				start: line.fromNode.position,
 				end: line.toNode.position,
 				color: line.value ? '#f00' : '#ccc',
@@ -87,6 +87,32 @@ class _Renderer {
 		this.#ctx.lineTo(endPos.value[0], endPos.value[1])
 		this.#ctx.closePath()
 		if (color) this.#ctx.stroke();
+	}
+
+
+
+	#drawTraceLine({start, end, color}) {
+		let dx = end.value[0] - start.value[0];
+		let dy = end.value[1] - start.value[1];
+
+		let b = .1 * dx;
+		let a = dx / 2 - .5 * Math.sqrt(2) * b;
+		let c = dy - Math.sqrt(2) * b;
+
+		let subPos = start.copy().add(new Vector(a, 0));
+		this.#drawLine({start: start, end: subPos, color: color});
+
+		let subPos2 = subPos.copy().add(new Vector(.5 * Math.sqrt(2) * b, .5 * Math.sqrt(2) * b));
+		this.#drawLine({start: subPos, end: subPos2, color: color});
+
+		let subPos3 = subPos2.copy().add(new Vector(0, c));
+		this.#drawLine({start: subPos2, end: subPos3, color: color});
+
+		let subPos4 = subPos3.copy().add(new Vector(.5 * Math.sqrt(2) * b, .5 * Math.sqrt(2) * b));
+		this.#drawLine({start: subPos3, end: subPos4, color: color});
+
+		let subPos5 = subPos4.copy().add(new Vector(a, 0));
+		this.#drawLine({start: subPos4, end: subPos5, color: color});
 	}
 
 
