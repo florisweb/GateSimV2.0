@@ -14,7 +14,7 @@ const Runner = new class {
 
 	evaluatePaths() {
 		this.paths = [];
-		for (let input of World.inputs)
+		for (let input of World.component.inputs)
 		{
 			input.evaluatePaths();
 		}

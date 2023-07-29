@@ -1,17 +1,30 @@
 
 let Renderer;
 
+
+class WorldComponent extends Component {
+	type = 'WorldComponent';
+	get size() {
+		return World.size;
+	}
+}
+
+
+
+
+
+
+
+
 const World = new class {
-
 	size = new Vector(950, 950);
-
-	inputs = [];
-	outputs = [];
-	components = [];
 
 	nodes = [];
 	lines = [];
 
+
+
+	component = new WorldComponent();
 
 	async setup() {
 		Renderer = new _Renderer();
@@ -19,20 +32,29 @@ const World = new class {
 
 
 
-
-		const startNode = new WorldInputNode({index: 0}, this);
-		this.inputs.push(startNode);
-		startNode.name = 'Start';
-		const finishNode = new WorldOutputNode({index: 0}, this);
-		this.outputs.push(startNode);
-		finishNode.name = 'Finish';
-		
 		const nandGate = new NandGate();
-		this.components.push(nandGate);
+		this.component = new WorldComponent({
+			inputCount: 1,
+			outputCount: 1,
+			content: [
+				nandGate,
+				// new Line(startNode, nandGate.inputs[0]),
+				// new Line(nandGate.outputs[0], nandGate.inputs[1]),
+				// new Line(nandGate.outputs[0], finishNode)
+			]
+		});
 
-		new Line(startNode, nandGate.inputs[0]);
-		new Line(nandGate.outputs[0], nandGate.inputs[1]);
-		new Line(nandGate.outputs[0], finishNode);
+
+
+
+		// const startNode = new WorldInputNode({index: 0}, this);
+		// this.inputs.push(startNode);
+		// startNode.name = 'Start';
+		// const finishNode = new WorldOutputNode({index: 0}, this);
+		// this.outputs.push(startNode);
+		// finishNode.name = 'Finish';
+		
+
 
 
 
@@ -227,5 +249,8 @@ const World = new class {
 		Runner.run();
 	}
 }
+
+
+
 
 World.setup();

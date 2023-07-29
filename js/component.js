@@ -1,8 +1,10 @@
 
 class BaseComponent {
+	type = '';
 	parent;
 	relativePosition = new Vector(0, 0);
 	size = new Vector(100, 100);
+	id = newId();
 
 
 	get position() {
@@ -13,23 +15,44 @@ class BaseComponent {
 	inputs = [];
 	outputs = [];
 
-	constructor({relPos}, _parent) {
+	constructor({relPos, id} = {}, _parent) {
 		this.parent = _parent;
-		this.relativePosition = relPos;
+		if (relPos) this.relativePosition = relPos;
+		if (id) this.id = id;
+	}
+
+
+	serialize() {
+		return {
+			id: this.id,
+			type: this.type,
+			relativePosition: this.relativePosition.value,
+			inputCount: this.inputs.length,
+			outputCount: this.outputs.length,
+		}
 	}
 }
 
 
 
 
-class Component {
+class Component extends BaseComponent {
+	type = 'CustomComponent';
+	content = [];
 
+	constructor({relPos, content, inputCount, outputCount} = {relPos: new Vector(0, 0), content: [], inputCount: 0, outputCount: 0}, _parent) {
+		super(...arguments);
+		for (let i = 0; i < inputCount; i++) this.inputs.push(new InputNode({index: i}, this));
+		for (let i = 0; i < outputCount; i++) this.outputs.push(new OutputNode({index: i}, this));
 
-	constructor({relPos, content, inputCount, outputCount}, _parent) {
+		this.content = content;
+	}
 
-
-
-
+	serialize() {
+		let base = super.serialize();
+		let content = this.content.map(c => c.serialize());
+		base.content = content;
+		return base;
 	}
 }
 
@@ -50,6 +73,7 @@ class Component {
 
 
 class NandGate extends BaseComponent {
+	type = 'NAND';
 	inputs = [
 		new NandInputNode({index: 0}, this),
 		new NandInputNode({index: 1}, this),
@@ -64,8 +88,7 @@ class NandGate extends BaseComponent {
 				.5 * World.size.value[0],
 				.5 * World.size.value[1]
 			)
-		})
-
+		});
 	}
 }
 

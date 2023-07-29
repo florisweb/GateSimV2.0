@@ -12,6 +12,12 @@ class Node {
 		return new Vector(0, 0);
 	}
 
+	get id() {
+		let ownId = (this.isInput ? 'IN' : 'OUT') + this.index;
+		return this.parent.id + '|' + ownId;
+	}
+
+
 	value = false;
 	calcValue() {
 		this.value = this.linesTo.filter((line) => line.value).length > 0;
@@ -80,10 +86,9 @@ class OutputNode extends Node {
 
 class WorldInputNode extends InputNode {
 	get position() {
-		return new Vector(
-			50, 
-			Math.random() * World.size.value[1]
-		);
+		let pos = super.position;
+		pos.value[0] = 50;
+		return pos;
 	}
 
 	value = true;
@@ -93,10 +98,9 @@ class WorldInputNode extends InputNode {
 
 class WorldOutputNode extends OutputNode {
 	get position() {
-		return new Vector(
-			World.size.value[0], 
-			Math.random() * World.size.value[1]
-		);
+		let pos = super.position;
+		pos.value[0] = World.size.value[0];
+		return pos;
 	}
 }
 
@@ -124,6 +128,14 @@ class Line {
 		this.fromNode.linesFrom.push(this);
 		this.toNode.linesTo.push(this);
 		World.lines.push(this);
+	}
+
+	serialize() {
+		return {
+			type: 'LINE',
+			from: this.fromNode.id,
+			to: this.toNode.id,
+		}
 	}
 }
 
