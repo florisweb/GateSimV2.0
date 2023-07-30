@@ -7,6 +7,16 @@ class _ComponentManager {
 	}
 
 
+	constructor() {
+		try {
+			this.#components = JSON.parse(localStorage.components);
+		} catch (_e) {
+			console.warn('[ComponentManager]: Error while loading components:', _e);
+			return;
+		}
+		console.warn('[ComponentManager]: Succesfully loaded ' + this.#components.length + ' components.');
+	}
+
 
 	getById(_compId) {
 		return this.#components.find((c) => c.componentId === _compId);
@@ -16,6 +26,7 @@ class _ComponentManager {
 
 	addComponent(_comp) {
 		this.#components.push(_comp);
+		localStorage.components = JSON.stringify(this.#components);
 		ComponentPanel.update();
 	}
 
@@ -43,7 +54,15 @@ class _ComponentManager {
 					deserializedContent.push(nandGate);
 					break;
 				case 'CustomComponent':
-					deserializedContent.push(this.deserializeComponent(item));
+					if (item.isReference)
+					{
+						let template = this.getById(item.componentId);
+						if (!template) {
+							console.warn('[deserialize] Could not find component-reference:', item);
+							continue;
+						} 
+						deserializedContent.push(this.deserializeComponent(template));
+					} else deserializedContent.push(this.deserializeComponent(item));
 					break;
 				case 'Line':
 					lines.push(item);

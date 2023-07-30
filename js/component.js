@@ -107,10 +107,17 @@ class Component extends BaseComponent {
 		for (let i = 0; i < outputs.length; i++) this.outputs.push(new OutputNode({index: i, name: outputs[i].name}, this));
 	}
 
-	serialize() {
+	serialize(_asReference = false) {
+		if (_asReference) return {
+			type: 'CustomComponent',
+			componentId: this.componentId,
+			relativePosition: this.relativePosition,
+			isReference: true,
+		};
+
 		let base = super.serialize();
 		base.componentId = this.componentId;
-		let content = this.content.map(c => c.serialize());
+		let content = this.content.map(c => c.serialize(true));
 		base.content = content;
 		return base;
 	}
