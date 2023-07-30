@@ -54,7 +54,7 @@ class _Renderer {
 		this.#drawRect({
 			position: _comp.position,
 			diagonal: _comp.size,
-			fillColor: '#333',
+			fillColor: _comp.selected ? '#335' : '#333',
 			strokeColor: '#777'
 		});
 
@@ -66,8 +66,8 @@ class _Renderer {
 		this.#drawCircle({
 			position: _node.position,
 			radius: this.NodeSize, 
-			fillColor: _node.value ? '#f00' : '#333',
-			strokeColor: '#aaa'
+			fillColor: _node.value ? (_node.selected ? '#c03' : '#f00') : (_node.selected ? '#335' : '#333'),
+			strokeColor: '#aaa',
 		});
 		this.#drawCenteredText({
 			text: _node.name,

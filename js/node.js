@@ -7,7 +7,14 @@ class Node {
 	name;
 	linesTo = [];
 	linesFrom = [];
+	
+
+	// UI Aspects
 	hitBox;
+	get selected() {
+		return Builder.selectedItems.findIndex((item) => item.id === this.id) !== -1;
+	}
+
 
 
 

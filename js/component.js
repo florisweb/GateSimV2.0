@@ -4,9 +4,18 @@ class BaseComponent {
 	parent;
 	relativePosition = new Vector(0, 0);
 	size = new Vector(100, 100);
-	hitBox;
-	
 	id = newId();
+	
+
+	// UI Aspects
+	hitBox;
+	get selected() {
+		return Builder.selectedItems.findIndex((item) => item.id === this.id) !== -1;
+	}
+
+
+
+
 	get indexInParentContext() {
 		if (!this.parent) return -1;
 		return this.parent.content.findIndex((item) => item === this);
@@ -18,7 +27,7 @@ class BaseComponent {
 	}
 	inputs = [];
 	outputs = [];
-	
+
 
 	constructor({relativePosition} = {}) {
 		if (relativePosition) this.relativePosition = relativePosition;
