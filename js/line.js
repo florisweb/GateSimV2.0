@@ -44,7 +44,6 @@ class BuildLine {
 	toNode;
 
 	constructor(from) {
-		console.warn(...arguments);
 		this.fromNode = from;
 		this.toNode = new class {
 			linesTo = [];

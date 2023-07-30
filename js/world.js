@@ -315,3 +315,12 @@ const World = new class {
 
 
 World.setup();
+
+
+
+function setInputs() {
+	for (let i = 0; i < World.component.inputs.length; i++)
+	{
+		World.component.inputs[i].value = !!arguments[i]
+	}
+}

@@ -124,6 +124,12 @@ class Component extends BaseComponent {
 		let targetChild = this.content[index];
 		return targetChild._getNodeByLocalNodeId(localNodeId);
 	}
+
+
+	addComponent(_comp) {
+		this.content.push(_comp);
+		_comp.setParent(this);
+	}
 }
 
 
@@ -175,14 +181,8 @@ class NandGate extends BaseComponent {
 		new NandOutputNode({index: 0}, this)
 	];
 
-	constructor({id} = {}) {
-		super({
-			id: id,
-			relativePosition: new Vector(
-				.5 * World.size.value[0],
-				.5 * World.size.value[1]
-			)
-		});
+	constructor({relativePosition} = {relativePosition: new Vector(0, 0)}) {
+		super(...arguments);
 	}
 }
 
