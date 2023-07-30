@@ -16,8 +16,8 @@ class _HitBoxManager {
   unregister(_id) {
     for (let i = this.list.length - 1; i >= 0; i--)
     {
-      if (this.list[i].hitBoxId != _id) continue;
-      this.list.splice(i, 1);
+      if (this.list[i].id != _id) continue;
+      console.log('remove2', this.list.splice(i, 1));
       return true;
     }
     return false;
@@ -49,6 +49,7 @@ class _HitBoxManager {
 
 
 class BaseHitbox {
+	id = newId();
 	parent;
 	offset = new Vector(0, 0);
 	get position() {

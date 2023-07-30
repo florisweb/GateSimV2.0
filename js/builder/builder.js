@@ -70,6 +70,7 @@ class _Builder {
 
 	onComponentChanged() {
 		Runner.evaluatePaths();
+		Runner.runViaPaths(true);
 	}
 }
 
