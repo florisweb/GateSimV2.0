@@ -23,6 +23,7 @@ class _InputHandler {
 	constructor({canvas}) {
 		this.#HTML.canvas = canvas;
 		this.#assignOnScrollHandler();
+		this.#assignMouseMoveHandler();
 		this.#assignMouseDragHandler();
 	}
 
@@ -43,6 +44,16 @@ class _InputHandler {
 			return false; 
 		}, false);
 	}
+
+
+
+	#assignMouseMoveHandler() {
+		this.#HTML.canvas.addEventListener("mousemove", _e => {
+		  	let worldPosition = this.#eventToWorldPos(_e);
+	    	Builder.handleMouseMove(worldPosition);
+		});
+	}
+
 
 
 	#assignMouseDragHandler() {

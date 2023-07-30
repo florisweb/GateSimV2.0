@@ -13,7 +13,6 @@ const World = new class {
 	size = new Vector(950, 950);
 
 	nodes = [];
-	lines = [];
 
 
 

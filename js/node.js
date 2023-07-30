@@ -2,6 +2,8 @@
 
 
 class Node {
+	isNode = true;
+	
 	parent;
 	index = 0;
 	name;
@@ -41,7 +43,6 @@ class Node {
 		this.parent = _parent;
 
 		this.hitBox = new CircularHitBox({radius: Renderer.NodeSize}, this);
-
 		World.nodes.push(this);
 	}
 

@@ -10,7 +10,6 @@ class Line {
 		this.toNode = to;
 		this.fromNode.linesFrom.push(this);
 		this.toNode.linesTo.push(this);
-		World.lines.push(this);
 	}
 
 	serialize() {
@@ -18,6 +17,28 @@ class Line {
 			type: 'Line',
 			fromId: this.fromNode.id,
 			toId: this.toNode.id,
+		}
+	}
+}
+
+
+
+
+class BuildLine {
+	get value() {
+		return this.fromNode.value;
+	}
+	fromNode;
+	toNode;
+
+	constructor(from) {
+		console.warn(...arguments);
+		this.fromNode = from;
+		this.toNode = new class {
+			linesTo = [];
+			get position() {
+				return Builder.curMousePos;
+			}
 		}
 	}
 }

@@ -32,6 +32,12 @@ class _Renderer {
 		}
 		this.renderWorldNodes();
 
+
+		for (let line of Builder.buildLines)
+		{
+			this.renderLine(line);
+		}
+
 		requestAnimationFrame(() => this.render());
 	}
 
