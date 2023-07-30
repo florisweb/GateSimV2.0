@@ -4,7 +4,13 @@ class BaseComponent {
 	parent;
 	relativePosition = new Vector(0, 0);
 	size = new Vector(100, 100);
+	
 	id = newId();
+	get indexInParentContext() {
+		if (!this.parent) return -1;
+		return this.parent.content.findIndex((item) => item === this);
+	}
+
 
 
 	get position() {
@@ -15,9 +21,8 @@ class BaseComponent {
 	inputs = [];
 	outputs = [];
 
-	constructor({relativePosition, id} = {}) {
+	constructor({relativePosition} = {}) {
 		if (relativePosition) this.relativePosition = relativePosition;
-		if (id) this.id = id;
 	}
 
 	setParent(_parent) {
@@ -27,7 +32,6 @@ class BaseComponent {
 
 	serialize() {
 		return {
-			id: this.id,
 			type: this.type,
 			relativePosition: this.relativePosition.value,
 			inputs: this.inputs.map((inp) => {return {name: inp.name}}),
@@ -56,6 +60,11 @@ class Component extends BaseComponent {
 		super(...arguments);
 		this._createInputs({inputs: inputs, outputs: outputs})
 		this.content = content;
+		for (let child of this.content)
+		{
+			if (child instanceof Line) continue;
+			child.setParent(this);
+		}
 		this.componentId = componentId;
 	}
 
@@ -74,17 +83,15 @@ class Component extends BaseComponent {
 	}
 
 	getNodeById(_nodeId) {
-		let [parentId, localNodeId] = _nodeId.split('|');
-		if (parentId === this.id)
+		let [parentCIId, localNodeId] = _nodeId.split('|');
+		let index = parseInt(parentCIId.substr(2, 1000));
+		if (index === -1)
 		{
 			return this._getNodeByLocalNodeId(localNodeId);
 		}
 
-		for (let comp of this.content)
-		{
-			if (comp.id !== parentId) continue;
-			return comp._getNodeByLocalNodeId(localNodeId);
-		}
+		let targetChild = this.content[index];
+		return targetChild._getNodeByLocalNodeId(localNodeId);
 	}
 }
 

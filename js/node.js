@@ -14,7 +14,7 @@ class Node {
 
 	get id() {
 		let ownId = (this.isInput ? 'IN' : 'OUT') + this.index;
-		return this.parent.id + '|' + ownId;
+		return 'CI' + this.parent.indexInParentContext + '|' + ownId;
 	}
 
 

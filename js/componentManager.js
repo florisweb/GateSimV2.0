@@ -28,25 +28,19 @@ class _ComponentManager {
 					break;
 			}
 		}
-		
-
-
-		// attach the lines
-
-		// Fix parent-references
 
 		let self = new Component({
 			..._serialized,
 			relativePosition: new Vector(..._serialized.relativePosition),
 			content: deserializedContent,
 		});
+		
 		for (let comp of self.content) comp.setParent(self);
 
 		for (let lineData of lines)
 		{
 			let fromNode = self.getNodeById(lineData.fromId);
 			let toNode = self.getNodeById(lineData.toId);
-			console.log(fromNode, toNode);
 			let line = new Line(fromNode, toNode);
 			self.content.push(line);
 		}
