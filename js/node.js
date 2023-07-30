@@ -7,6 +7,9 @@ class Node {
 	name;
 	linesTo = [];
 	linesFrom = [];
+	hitBox;
+
+
 
 	get position() {
 		return new Vector(0, 0);
@@ -29,6 +32,9 @@ class Node {
 		this.index = index;
 		this.name = name;
 		this.parent = _parent;
+
+		this.hitBox = new CircularHitBox({radius: Renderer.NodeSize}, this);
+
 		World.nodes.push(this);
 	}
 

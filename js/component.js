@@ -4,6 +4,7 @@ class BaseComponent {
 	parent;
 	relativePosition = new Vector(0, 0);
 	size = new Vector(100, 100);
+	hitBox;
 	
 	id = newId();
 	get indexInParentContext() {
@@ -11,23 +12,29 @@ class BaseComponent {
 		return this.parent.content.findIndex((item) => item === this);
 	}
 
-
-
 	get position() {
 		if (this.parent) return this.parent.position.copy().add(this.relativePosition);
 		return this.relativePosition.copy();
 	}
-
 	inputs = [];
 	outputs = [];
+	
 
 	constructor({relativePosition} = {}) {
 		if (relativePosition) this.relativePosition = relativePosition;
+		this._setup(...arguments);
+	}
+	
+	_setup() {
+		this.hitBox = new RectangularHitBox({diagonal: this.size}, this);
 	}
 
 	setParent(_parent) {
 		this.parent = _parent;
 	}
+
+
+
 
 
 	serialize() {
@@ -58,7 +65,6 @@ class Component extends BaseComponent {
 
 	constructor({id, componentId, relativePosition, content, inputs, outputs} = {relativePosition: new Vector(0, 0), content: [], inputs: [], outputs: []}) {
 		super(...arguments);
-		this._createInputs({inputs: inputs, outputs: outputs})
 		this.content = content;
 		for (let child of this.content)
 		{
@@ -67,12 +73,11 @@ class Component extends BaseComponent {
 		}
 		this.componentId = componentId;
 	}
-
-	_createInputs({inputs, outputs}) {
+	_setup({inputs, outputs} = {}) {
+		super._setup(...arguments);
 		for (let i = 0; i < inputs.length; i++) this.inputs.push(new InputNode({index: i, name: inputs[i].name}, this));
 		for (let i = 0; i < outputs.length; i++) this.outputs.push(new OutputNode({index: i, name: outputs[i].name}, this));
 	}
-
 
 	serialize() {
 		let base = super.serialize();
@@ -114,7 +119,7 @@ class WorldComponent extends Component {
 		return World.size;
 	}
 
-	_createInputs({inputs, outputs}) {
+	_setup({inputs, outputs} = {inputs: [], outputs: []}) {
 		for (let i = 0; i < inputs.length; i++) this.inputs.push(new WorldInputNode({index: i, name: inputs[i].name}, this));
 		for (let i = 0; i < outputs.length; i++) this.outputs.push(new WorldOutputNode({index: i, name: outputs[i].name}, this));
 	}

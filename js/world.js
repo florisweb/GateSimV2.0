@@ -2,7 +2,8 @@
 let Renderer;
 let InputHandler;
 let ComponentManager;
-
+let HitBoxManager;
+let Builder;
 
 
 
@@ -16,10 +17,12 @@ const World = new class {
 
 
 
-	component = new WorldComponent();
+	component;
 
 	async setup() {
 		ComponentManager = new _ComponentManager();
+		HitBoxManager = new _HitBoxManager();
+		Builder = new _Builder();
 		Renderer = new _Renderer();
 		InputHandler = new _InputHandler({canvas: Renderer.canvas});
 		Renderer.setup();
@@ -257,7 +260,7 @@ const World = new class {
 
 
 
-		// s = JSON.parse("{\"id\":\"3371302870669524\",\"type\":\"WorldComponent\",\"relativePosition\":[0,0],\"inputs\":[{\"name\":\"input 1\"},{\"name\":\"input 2\"}],\"outputs\":[{\"name\":\"output 1\"},{\"name\":\"output 2\"}],\"content\":[{\"id\":\"2567345910695900\",\"type\":\"Nand\",\"relativePosition\":[300,200],\"inputs\":[{\"name\":\"NandOUT A\"},{\"name\":\"NandOUT B\"}],\"outputs\":[{\"name\":\"NandIN\"}]},{\"id\":\"8340953637569531\",\"type\":\"Nand\",\"relativePosition\":[500,200],\"inputs\":[{\"name\":\"NandOUT A\"},{\"name\":\"NandOUT B\"}],\"outputs\":[{\"name\":\"NandIN\"}]},{\"id\":\"7363862818809689\",\"type\":\"Nand\",\"relativePosition\":[500,600],\"inputs\":[{\"name\":\"NandOUT A\"},{\"name\":\"NandOUT B\"}],\"outputs\":[{\"name\":\"NandIN\"}]},{\"id\":\"4164272843849103\",\"type\":\"Nand\",\"relativePosition\":[700,200],\"inputs\":[{\"name\":\"NandOUT A\"},{\"name\":\"NandOUT B\"}],\"outputs\":[{\"name\":\"NandIN\"}]},{\"id\":\"60497006112971\",\"type\":\"Nand\",\"relativePosition\":[700,600],\"inputs\":[{\"name\":\"NandOUT A\"},{\"name\":\"NandOUT B\"}],\"outputs\":[{\"name\":\"NandIN\"}]},{\"type\":\"Line\",\"fromId\":\"CI-1|IN0\",\"toId\":\"CI0|IN0\"},{\"type\":\"Line\",\"fromId\":\"CI-1|IN0\",\"toId\":\"CI1|IN0\"},{\"type\":\"Line\",\"fromId\":\"CI-1|IN0\",\"toId\":\"CI2|IN0\"},{\"type\":\"Line\",\"fromId\":\"CI-1|IN1\",\"toId\":\"CI0|IN1\"},{\"type\":\"Line\",\"fromId\":\"CI-1|IN1\",\"toId\":\"CI1|IN0\"},{\"type\":\"Line\",\"fromId\":\"CI-1|IN1\",\"toId\":\"CI2|IN1\"},{\"type\":\"Line\",\"fromId\":\"CI0|OUT0\",\"toId\":\"CI1|IN1\"},{\"type\":\"Line\",\"fromId\":\"CI1|OUT0\",\"toId\":\"CI3|IN0\"},{\"type\":\"Line\",\"fromId\":\"CI1|OUT0\",\"toId\":\"CI3|IN1\"},{\"type\":\"Line\",\"fromId\":\"CI2|OUT0\",\"toId\":\"CI4|IN0\"},{\"type\":\"Line\",\"fromId\":\"CI2|OUT0\",\"toId\":\"CI4|IN1\"},{\"type\":\"Line\",\"fromId\":\"CI3|OUT0\",\"toId\":\"CI-1|OUT0\"},{\"type\":\"Line\",\"fromId\":\"CI4|OUT0\",\"toId\":\"CI-1|OUT1\"}]}")
+
 		// s = JSON.parse("{\"type\":\"WorldComponent\",\"relativePosition\":[0,0],\"inputs\":[{\"name\":\"input 1\"},{\"name\":\"input 2\"}],\"outputs\":[{\"name\":\"output 1\"},{\"name\":\"output 2\"}],\"content\":[{\"type\":\"Nand\",\"relativePosition\":[300,200],\"inputs\":[{\"name\":\"NandOUT A\"},{\"name\":\"NandOUT B\"}],\"outputs\":[{\"name\":\"NandIN\"}]},{\"type\":\"Nand\",\"relativePosition\":[500,200],\"inputs\":[{\"name\":\"NandOUT A\"},{\"name\":\"NandOUT B\"}],\"outputs\":[{\"name\":\"NandIN\"}]},{\"type\":\"Nand\",\"relativePosition\":[500,600],\"inputs\":[{\"name\":\"NandOUT A\"},{\"name\":\"NandOUT B\"}],\"outputs\":[{\"name\":\"NandIN\"}]},{\"type\":\"Nand\",\"relativePosition\":[700,200],\"inputs\":[{\"name\":\"NandOUT A\"},{\"name\":\"NandOUT B\"}],\"outputs\":[{\"name\":\"NandIN\"}]},{\"type\":\"Nand\",\"relativePosition\":[700,600],\"inputs\":[{\"name\":\"NandOUT A\"},{\"name\":\"NandOUT B\"}],\"outputs\":[{\"name\":\"NandIN\"}]},{\"type\":\"Line\",\"fromId\":\"CI-1|IN0\",\"toId\":\"CI0|IN0\"},{\"type\":\"Line\",\"fromId\":\"CI-1|IN0\",\"toId\":\"CI1|IN0\"},{\"type\":\"Line\",\"fromId\":\"CI-1|IN0\",\"toId\":\"CI2|IN0\"},{\"type\":\"Line\",\"fromId\":\"CI-1|IN1\",\"toId\":\"CI0|IN1\"},{\"type\":\"Line\",\"fromId\":\"CI-1|IN1\",\"toId\":\"CI1|IN0\"},{\"type\":\"Line\",\"fromId\":\"CI-1|IN1\",\"toId\":\"CI2|IN1\"},{\"type\":\"Line\",\"fromId\":\"CI0|OUT0\",\"toId\":\"CI1|IN1\"},{\"type\":\"Line\",\"fromId\":\"CI1|OUT0\",\"toId\":\"CI3|IN0\"},{\"type\":\"Line\",\"fromId\":\"CI1|OUT0\",\"toId\":\"CI3|IN1\"},{\"type\":\"Line\",\"fromId\":\"CI2|OUT0\",\"toId\":\"CI4|IN0\"},{\"type\":\"Line\",\"fromId\":\"CI2|OUT0\",\"toId\":\"CI4|IN1\"},{\"type\":\"Line\",\"fromId\":\"CI3|OUT0\",\"toId\":\"CI-1|OUT0\"},{\"type\":\"Line\",\"fromId\":\"CI4|OUT0\",\"toId\":\"CI-1|OUT1\"}]}");
 		// a = ComponentManager.deserializeComponent(s);
 		// b = ComponentManager.deserializeComponent(s);

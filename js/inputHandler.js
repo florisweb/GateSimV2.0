@@ -56,6 +56,9 @@ class _InputHandler {
 
 		this.#HTML.canvas.addEventListener("mouseup", _e => {
 			if (this.dragging) return stopDragging();
+
+			let worldPosition = this.#eventToWorldPos(_e);
+			Builder.clickHandler(worldPosition, _e);
 		});
 
 
