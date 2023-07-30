@@ -1,0 +1,27 @@
+:root {
+	--componentHolderWidth: 300px;
+}
+* {
+	box-sizing: border-box;
+}
+
+html, body {
+    font-family: "Lucida Sans Unicode", "Lucida Grande", sans-serif;
+    position: fixed;
+    width: 100vw;
+    height: 100vh;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+}
+
+#canvas {
+	position: relative;
+	top: 0;
+	left: 0;
+	background: #555;
+	width: 100vw;
+	height: 100vh;
+}
+
+

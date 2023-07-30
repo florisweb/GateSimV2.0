@@ -4,32 +4,23 @@
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<title></title>
-	<style>
-		* {
-			box-sizing: border-box;
-		}
-		
-		html, body {
-		    font-family: "Lucida Sans Unicode", "Lucida Grande", sans-serif;
-		    position: fixed;
-		    width: 100vw;
-		    height: 100vh;
-		    margin: 0;
-		    padding: 0;
-		    overflow: hidden;
-		}
 
-		#canvas {
-			position: relative;
-			top: 0;
-			left: 0;
-			background: #555;
-			width: 100vw;
-			height: 100vh;
-		}
-	</style>
+	<link rel="stylesheet" type="text/css" href="css/main.css">
+	<link rel="stylesheet" type="text/css" href="css/UI.css">
 </head>
 <body>
+
+	<div id='header' class='panel'>
+		<input class='inputField componentNameHolder header headerItem' placeholder="Component name...">
+		<div class='playButton running headerItem'></div>
+	</div>
+
+	<div id='componentHolder' class='panel'>
+		<div class='header'>COMPONENTS</div>
+
+	</div>
+
+
 	<canvas id='canvas' width="1000" height="1000"> 
 	</canvas>
 
