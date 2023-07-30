@@ -12,18 +12,30 @@ class _Builder {
 
 
 	clickHandler(_worldPos) {
-		this.selectedItems = [];
+		let selectedSomething = this.selectItemAt(_worldPos);
 		let hitBox = HitBoxManager.getItemByPosition(_worldPos);
 		let item = hitBox.parent;
+
 		if (item)
 		{
 			let isBuilding = this.handleLineBuildClicks(item);
 			if (isBuilding) return;
-			if (!item.isNode) return this.selectedItems = [item];
-		} else this.selectedItems = [];
+			if (selectedSomething) return;
+		}
 
 		let gate = new NandGate({relativePosition: this.curMousePos.copy()});
 		World.component.addComponent(gate);
+	}
+
+	selectItemAt(_worldPos) {
+		let hitBox = HitBoxManager.getItemByPosition(_worldPos);
+		let item = hitBox.parent;
+		if (item && !item.isNode)
+		{
+			if (!KeyHandler.shiftPressed) this.selectedItems = [];
+			if (this.selectedItems.findIndex((_item) => _item.id === item.id) === -1) this.selectedItems.push(item);
+			return true;
+		} else this.selectedItems = [];
 	}
 
 
@@ -79,10 +91,15 @@ class _Builder {
 		this.buildLines = [];
 	}
 
+	deSelectAll() {
+		this.selectedItems = [];
+	}
+
 
 
 	// DRAG SYSTEM
 	onDragStart(_worldPos) {
+		if (!this.selectedItems.length) this.selectItemAt(_worldPos);
 		if (!this.selectedItems.length) return;
 		this.dragging = true;
 	}

@@ -140,6 +140,7 @@ class _KeyHandler {
 			keys: ["Escape"], 
 			event: function () {
 				Builder.cancelBuildLines();
+				Builder.deSelectAll();
 			},
 			ignoreIfInInputField: false
 		},
@@ -159,7 +160,9 @@ class _KeyHandler {
 		},
 	];
 
-
+	get shiftPressed() {
+		return this.keys['Shift'];
+	}
 
 	constructor() {
 		window.addEventListener("keydown", _e => {
