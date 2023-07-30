@@ -1,6 +1,7 @@
 
 let Renderer;
 let InputHandler;
+let KeyHandler;
 let ComponentManager;
 let HitBoxManager;
 let Builder;
@@ -24,6 +25,7 @@ const World = new class {
 		Builder = new _Builder();
 		Renderer = new _Renderer();
 		InputHandler = new _InputHandler({canvas: Renderer.canvas});
+		KeyHandler = new _KeyHandler();
 		Renderer.setup();
 
 

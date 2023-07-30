@@ -63,6 +63,9 @@ class BaseHitbox {
 		HitBoxManager.register(this);
 	}
 
+	remove() {
+		HitBoxManager.unregister(this.id);
+	}
 }
 
 class RectangularHitBox extends BaseHitbox {

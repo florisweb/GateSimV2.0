@@ -10,15 +10,21 @@ class _Builder {
 
 
 	clickHandler(_worldPos) {
-		console.log('click', _worldPos);
 		this.selectedItems = [];
-		let result = HitBoxManager.getItemByPosition(_worldPos);
-		if (result) this.selectedItems = [result.parent];
-
-
-		this.handleLineBuildClicks(result.parent);
-		
+		let hitBox = HitBoxManager.getItemByPosition(_worldPos);
+		let item = hitBox.parent;
+		if (!item) return;
+		if (!item.isNode) this.selectedItems = [item];
+		this.handleLineBuildClicks(item);
 	}
+
+
+	handleMouseMove(_mousePos) {
+		this.curMousePos = _mousePos;
+	}
+
+
+
 
 	handleLineBuildClicks(_node) {
 		if (!_node.isNode) return;
@@ -45,15 +51,15 @@ class _Builder {
 
 		let line = new BuildLine(_node);
 		this.buildLines.push(line);
+		this.selectedItems.push(_node)
+	}
 
-		console.log('start build line', _node);
+	cancelBuildLines() {
+		this.buildLines = [];
 	}
 
 
 
-	handleMouseMove(_mousePos) {
-		this.curMousePos = _mousePos;
-	}
 
 
 
@@ -65,8 +71,5 @@ class _Builder {
 	onComponentChanged() {
 		Runner.evaluatePaths();
 	}
-
-
-  
 }
 

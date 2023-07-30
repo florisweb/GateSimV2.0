@@ -62,6 +62,23 @@ class BaseComponent {
 		if (isInput) return this.inputs[index];
 		return this.outputs[index];
 	}
+
+
+	remove() {
+		let index = this.indexInParentContext;
+		console.log(index, this.parent.content, this.parent.content[index], this);
+		if (index !== -1) this.parent.content.splice(index, 1);
+
+		
+		let lines = [];
+		for (let input of this.inputs) lines = lines.concat(input.linesTo);
+		for (let output of this.outputs) lines = lines.concat(output.linesFrom);
+		for (let line of lines) line.remove();
+
+		this.hitBox.remove();
+		let nodes = [...this.inputs, ...this.outputs];
+		for (let node of nodes) node.hitBox.remove();
+	}
 }
 
 

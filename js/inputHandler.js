@@ -111,3 +111,97 @@ class _InputHandler {
   	return Renderer.camera.canvPosToWorldPos(mousePosition);
 	}
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+class _KeyHandler {
+	keys = [];
+	shortCuts = [
+		{
+			keys: ["Escape"], 
+			event: function () {
+				Builder.cancelBuildLines();
+			},
+			ignoreIfInInputField: false
+		},
+		{
+			keys: ["Backspace"], 
+			event: async function () {
+				if (!Builder.selectedItems.length) return;
+				for (let item of Builder.selectedItems)
+				{
+					if (item.isNode) continue;
+					item.remove();
+				}
+				Builder.cancelBuildLines();
+				Builder.onComponentChanged();
+			},
+			ignoreIfInInputField: true
+		},
+	];
+
+
+
+	constructor() {
+		window.addEventListener("keydown", _e => {
+			this.keys[_e.key] = true;
+			this.handleKeys(_e);
+		});
+
+		window.addEventListener("keyup", _e => {
+			this.keys[_e.key] = false;
+		});
+	}
+
+  handleKeys(_event) {
+		let inInputField = _event.target.type == "text" || _event.target.type == "textarea" ? true : false;
+
+		for (let i = 0; i < this.shortCuts.length; i++)
+		{
+			let curShortcut = this.shortCuts[i]; 
+			if (curShortcut.ignoreIfInInputField && inInputField) continue;
+
+			let success = true;
+			for (let i = 0; i < curShortcut.keys.length; i++)
+			{
+				let curKey = curShortcut.keys[i];
+				if (this.keys[curKey]) continue;
+				success = false;
+				break;
+			}
+
+			if (!success) continue;
+
+			_event.target.blur();
+
+			let status = false;
+			try {status = curShortcut.event(_event);}
+			catch (e) {console.warn(e)};
+			return true;
+		}
+	}
+}
+
+
+
+
+
+
+
+
