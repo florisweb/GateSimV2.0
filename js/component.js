@@ -174,6 +174,7 @@ class WorldComponent extends Component {
 
 class NandGate extends BaseComponent {
 	type = 'Nand';
+	name = 'NandGate';
 	size = new Vector(100, 120);
 	inputs = [
 		new NandInputNode({index: 0}, this),

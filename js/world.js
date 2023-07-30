@@ -6,6 +6,9 @@ let ComponentManager;
 let HitBoxManager;
 let Builder;
 
+let Header;
+let ComponentPanel;
+
 
 
 
@@ -26,7 +29,10 @@ const World = new class {
 		Renderer = new _Renderer();
 		InputHandler = new _InputHandler({canvas: Renderer.canvas});
 		KeyHandler = new _KeyHandler();
+		Header = new _Header();
+		ComponentPanel = new _ComponentPanel();
 		Renderer.setup();
+		ComponentPanel.setup();
 
 
 

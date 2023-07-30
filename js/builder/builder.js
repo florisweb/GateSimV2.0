@@ -25,9 +25,6 @@ class _Builder {
 			if (isBuilding) return;
 			if (selectedSomething) return;
 		}
-
-		let gate = new NandGate({relativePosition: this.curMousePos.copy()});
-		World.component.addComponent(gate);
 	}
 
 	selectItemAt(_worldPos) {
@@ -123,14 +120,25 @@ class _Builder {
 
 
 
-
-
-
-
-
 	onComponentChanged() {
 		Runner.evaluatePaths();
 		Runner.runViaPaths(true);
+	}
+
+
+
+
+
+
+
+
+
+
+	packageComponent() {
+		let comp = World.component.serialize();
+		comp.name = Header.curComponentName;
+		comp.componentId = newId();
+		return comp;
 	}
 }
 

@@ -1,9 +1,28 @@
 
 class _ComponentManager {
-	components = [];
+
+	#components = [];
+	get components() {
+		return this.#components
+	}
+
+
 
 	getById(_compId) {
-		return this.components.find((c) => c.componentId === _compId);
+		return this.#components.find((c) => c.componentId === _compId);
+	}
+
+
+
+	addComponent(_comp) {
+		this.#components.push(_comp);
+		ComponentPanel.update();
+	}
+
+	createComponentFromId(_id) {
+		let compTemplate = this.#components.find((_comp) => _comp.componentId === _id);
+		if (!compTemplate) return;
+		return this.deserializeComponent(compTemplate);
 	}
 
 
