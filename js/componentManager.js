@@ -36,7 +36,10 @@ class _ComponentManager {
 			switch (item.type)
 			{
 				case 'Nand':
-					let nandGate = new NandGate(item);
+					let nandGate = new NandGate({
+						...item,
+						relativePosition: new Vector(...item.relativePosition)
+					});
 					deserializedContent.push(nandGate);
 					break;
 				case 'CustomComponent':
