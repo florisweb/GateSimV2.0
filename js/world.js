@@ -208,62 +208,66 @@ const World = new class {
 
 
 
-
-
-
-
-
-		const nandGateA = new NandGate();
-		nandGateA.relativePosition.value[0] = 300;
-		nandGateA.relativePosition.value[1] = 200;
-
-		const nandGateB = new NandGate();
-		nandGateB.relativePosition.value[0] = 500;
-		nandGateB.relativePosition.value[1] = 200;
-
-		const nandGateC = new NandGate();
-		nandGateC.relativePosition.value[0] = 500;
-		nandGateC.relativePosition.value[1] = 600;
-
-		const invA = new NandGate();
-		invA.relativePosition.value[0] = 700;
-		invA.relativePosition.value[1] = 200;
-
-		const invB = new NandGate();
-		invB.relativePosition.value[0] = 700;
-		invB.relativePosition.value[1] = 600;
-
 		this.component = new WorldComponent({
 			inputs: [{name: 'input 1'}, {name: 'input 2'}, {name: 'input 3'}, {name: 'input 4'}, {name: 'input 5'}],
 			outputs: [{name: 'output 1'}, {name: 'output 2'}, {name: 'output 3'}, {name: 'output 4'}, {name: 'input 5'}],
-			content: [
-				nandGateA,
-				nandGateB,
-				nandGateC,
-				invA,
-				invB,
-			]
+			content: []
 		});
 
-		this.component.content.push(new Line(this.component.inputs[0], nandGateA.inputs[0]));
-		this.component.content.push(new Line(this.component.inputs[0], nandGateB.inputs[0]));
-		this.component.content.push(new Line(this.component.inputs[0], nandGateC.inputs[0]));
-
-		this.component.content.push(new Line(this.component.inputs[1], nandGateA.inputs[1]));
-		this.component.content.push(new Line(this.component.inputs[1], nandGateB.inputs[0]));
-		this.component.content.push(new Line(this.component.inputs[1], nandGateC.inputs[1]));
 
 
-		this.component.content.push(new Line(nandGateA.outputs[0], nandGateB.inputs[1]));
-		this.component.content.push(new Line(nandGateB.outputs[0], invA.inputs[0]));
-		this.component.content.push(new Line(nandGateB.outputs[0], invA.inputs[1]));
+
+		// const nandGateA = new NandGate();
+		// nandGateA.relativePosition.value[0] = 300;
+		// nandGateA.relativePosition.value[1] = 200;
+
+		// const nandGateB = new NandGate();
+		// nandGateB.relativePosition.value[0] = 500;
+		// nandGateB.relativePosition.value[1] = 200;
+
+		// const nandGateC = new NandGate();
+		// nandGateC.relativePosition.value[0] = 500;
+		// nandGateC.relativePosition.value[1] = 600;
+
+		// const invA = new NandGate();
+		// invA.relativePosition.value[0] = 700;
+		// invA.relativePosition.value[1] = 200;
+
+		// const invB = new NandGate();
+		// invB.relativePosition.value[0] = 700;
+		// invB.relativePosition.value[1] = 600;
+
+		// this.component = new WorldComponent({
+		// 	inputs: [{name: 'input 1'}, {name: 'input 2'}, {name: 'input 3'}, {name: 'input 4'}, {name: 'input 5'}],
+		// 	outputs: [{name: 'output 1'}, {name: 'output 2'}, {name: 'output 3'}, {name: 'output 4'}, {name: 'input 5'}],
+		// 	content: [
+		// 		nandGateA,
+		// 		nandGateB,
+		// 		nandGateC,
+		// 		invA,
+		// 		invB,
+		// 	]
+		// });
+
+		// this.component.content.push(new Line(this.component.inputs[0], nandGateA.inputs[0]));
+		// this.component.content.push(new Line(this.component.inputs[0], nandGateB.inputs[0]));
+		// this.component.content.push(new Line(this.component.inputs[0], nandGateC.inputs[0]));
+
+		// this.component.content.push(new Line(this.component.inputs[1], nandGateA.inputs[1]));
+		// this.component.content.push(new Line(this.component.inputs[1], nandGateB.inputs[0]));
+		// this.component.content.push(new Line(this.component.inputs[1], nandGateC.inputs[1]));
 
 
-		this.component.content.push(new Line(nandGateC.outputs[0], invB.inputs[0]));
-		this.component.content.push(new Line(nandGateC.outputs[0], invB.inputs[1]));
+		// this.component.content.push(new Line(nandGateA.outputs[0], nandGateB.inputs[1]));
+		// this.component.content.push(new Line(nandGateB.outputs[0], invA.inputs[0]));
+		// this.component.content.push(new Line(nandGateB.outputs[0], invA.inputs[1]));
 
-		this.component.content.push(new Line(invA.outputs[0], this.component.outputs[0]));
-		this.component.content.push(new Line(invB.outputs[0], this.component.outputs[1]));
+
+		// this.component.content.push(new Line(nandGateC.outputs[0], invB.inputs[0]));
+		// this.component.content.push(new Line(nandGateC.outputs[0], invB.inputs[1]));
+
+		// this.component.content.push(new Line(invA.outputs[0], this.component.outputs[0]));
+		// this.component.content.push(new Line(invB.outputs[0], this.component.outputs[1]));
 
 
 

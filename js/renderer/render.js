@@ -1,6 +1,7 @@
 
 class _Renderer {
 	NodeSize = 15;
+	NodeMargin = 70;
 
 
 
@@ -69,8 +70,15 @@ class _Renderer {
 			strokeColor: '#777'
 		});
 
-		let nodes = [..._comp.inputs, ..._comp.outputs]
+		let nodes = [..._comp.inputs, ..._comp.outputs];
 		for (let node of nodes) this.renderNode(node);
+
+		this.#drawCenteredText({
+			text: _comp.name,
+			position: _comp.position.copy().add(_comp.size.copy().scale(.5)),
+			color: '#fff',
+			fontSize: 20
+		})
 	}
 
 	renderNode(_node) {
@@ -85,7 +93,7 @@ class _Renderer {
 			position: _node.position.copy().add(new Vector(0, this.NodeSize * 1.5)),
 			color: '#eee',
 			fontSize: 15
-		})
+		});
 	}
 
 	renderToggleButton(_button) {

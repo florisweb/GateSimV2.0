@@ -21,6 +21,11 @@ class _ComponentManager {
 	getById(_compId) {
 		return this.#components.find((c) => c.componentId === _compId);
 	}
+	clear() {
+		this.#components = [];
+		localStorage.components = JSON.stringify(this.#components);
+		ComponentPanel.update();
+	}
 
 
 

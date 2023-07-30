@@ -5,6 +5,7 @@ class BaseComponent {
 	relativePosition = new Vector(0, 0);
 	size = new Vector(100, 100);
 	id = newId();
+	name = '';
 	
 
 	// UI Aspects
@@ -29,8 +30,9 @@ class BaseComponent {
 	outputs = [];
 
 
-	constructor({relativePosition} = {}) {
+	constructor({relativePosition, name} = {}) {
 		if (relativePosition) this.relativePosition = relativePosition;
+		this.name = name;
 		this._setup(...arguments);
 	}
 	
@@ -105,6 +107,9 @@ class Component extends BaseComponent {
 		super._setup(...arguments);
 		for (let i = 0; i < inputs.length; i++) this.inputs.push(new InputNode({index: i, name: inputs[i].name}, this));
 		for (let i = 0; i < outputs.length; i++) this.outputs.push(new OutputNode({index: i, name: outputs[i].name}, this));
+		
+		this.size.value[0] = Math.max(100, Math.min(400, this.name.length * 10 + 40 + 2 * Renderer.NodeSize));
+		this.size.value[1] = Math.max(inputs.length, outputs.length) * (Renderer.NodeSize + Renderer.NodeMargin);
 	}
 
 	serialize(_asReference = false) {
@@ -182,7 +187,7 @@ class WorldComponent extends Component {
 class NandGate extends BaseComponent {
 	type = 'Nand';
 	name = 'NandGate';
-	size = new Vector(100, 120);
+	size = new Vector(170, 120);
 	inputs = [
 		new NandInputNode({index: 0}, this),
 		new NandInputNode({index: 1}, this),

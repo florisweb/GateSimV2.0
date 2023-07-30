@@ -78,7 +78,7 @@ class InputNode extends Node {
 		let deltaFromCenter = this.index - (sisterNodeCount - 1) / 2;
 		let relVector = new Vector(
 			0, 
-			this.parent.size.value[1] / 2 + deltaFromCenter * 70,
+			this.parent.size.value[1] / 2 + deltaFromCenter * Renderer.NodeMargin,
 		);
 		return this.parent.position.copy().add(relVector);
 	}
@@ -92,7 +92,7 @@ class OutputNode extends Node {
 
 		let relVector = new Vector(
 			this.parent.size.value[0], 
-			this.parent.size.value[1] / 2 + deltaFromCenter * 70,
+			this.parent.size.value[1] / 2 + deltaFromCenter * Renderer.NodeMargin,
 		);
 		if (this.parent) return this.parent.position.copy().add(relVector);
 		return relVector;
