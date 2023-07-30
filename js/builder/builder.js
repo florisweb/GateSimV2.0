@@ -43,6 +43,18 @@ class _Builder {
 
 			for (let i = 0; i < this.buildLines.length; i++)
 			{
+				let lineExists = false;
+				for (let item of World.component.content)
+				{
+					if (!(item instanceof Line)) continue;
+					if (item.fromNode.id !== this.buildLines[i].fromNode.id) continue;
+					if (item.toNode.id !== _node.id) continue;
+
+					lineExists = true;
+					item.remove();
+				}
+
+				if (lineExists) continue;
 				let line = new Line(this.buildLines[i].fromNode, _node);
 				World.component.content.push(line);
 			}
