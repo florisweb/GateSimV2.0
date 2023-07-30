@@ -63,6 +63,7 @@ class _InputHandler {
 		window.addEventListener("mousedown", _e => {
 			dragStartTime = new Date();
 			let worldPosition = this.#eventToWorldPos(_e);
+			Builder.onDragStart(worldPosition);
 		});
 
 		this.#HTML.canvas.addEventListener("mouseup", _e => {
@@ -92,12 +93,14 @@ class _InputHandler {
 		});
 
 		function stopDragging() {
+			Builder.onDragEnd();
 			InputHandler.dragging = false;
 			prevDragVector = false;
 		}
 
 
 		function dragHandler(_position, _delta) {
+			if (Builder.dragging) return Builder.onDrag(_position, _delta);
 			Renderer.camera.position.add(_delta);
 		}
 	}

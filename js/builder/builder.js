@@ -8,6 +8,8 @@ class _Builder {
 
 	curMousePos = new Vector(0, 0);
 
+	dragging = false;
+
 
 	clickHandler(_worldPos) {
 		this.selectedItems = [];
@@ -18,7 +20,7 @@ class _Builder {
 			let isBuilding = this.handleLineBuildClicks(item);
 			if (isBuilding) return;
 			if (!item.isNode) return this.selectedItems = [item];
-		}
+		} else this.selectedItems = [];
 
 		let gate = new NandGate({relativePosition: this.curMousePos.copy()});
 		World.component.addComponent(gate);
@@ -31,7 +33,7 @@ class _Builder {
 
 
 
-
+	// LINE CREATE SYSTEM
 	handleLineBuildClicks(_node) {
 		if (!_node.isNode) return false;
 
@@ -76,6 +78,25 @@ class _Builder {
 	cancelBuildLines() {
 		this.buildLines = [];
 	}
+
+
+
+	// DRAG SYSTEM
+	onDragStart(_worldPos) {
+		if (!this.selectedItems.length) return;
+		this.dragging = true;
+	}
+
+
+	onDrag(_position, _delta) {
+		for (let item of this.selectedItems) item.relativePosition.add(_delta.copy().scale(-1));
+	}
+
+	onDragEnd() {
+		this.dragging = false;
+	}
+
+
 
 
 

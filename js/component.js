@@ -66,9 +66,7 @@ class BaseComponent {
 
 	remove() {
 		let index = this.indexInParentContext;
-		console.log(index, this.parent.content, this.parent.content[index], this);
 		if (index !== -1) this.parent.content.splice(index, 1);
-
 		
 		let lines = [];
 		for (let input of this.inputs) lines = lines.concat(input.linesTo);
@@ -78,6 +76,10 @@ class BaseComponent {
 		this.hitBox.remove();
 		let nodes = [...this.inputs, ...this.outputs];
 		for (let node of nodes) node.hitBox.remove();
+
+
+		if (!this.selected) return;
+		Builder.selectedItems.splice(Builder.selectedItems.findIndex(item => item.id === this.id), 1);
 	}
 }
 
