@@ -142,16 +142,25 @@ class _Renderer {
 	}
 
 
-
+	#sqrt2 = Math.sqrt(2);
 	#drawTraceLine({start, end, color}) {
 		let dx = end.value[0] - start.value[0];
 		let dy = end.value[1] - start.value[1];
 
 		let b = .1 * dx;
-		let bx = .5 * Math.sqrt(2) * b;
+
+		if (Math.abs(dy) < Math.abs(this.#sqrt2 * b))
+		{
+			b = dy / 2 * this.#sqrt2;
+			if (dy < 0) b *= -1;
+			if (dx < 0) b *= -1;
+		}
+
+		let bx = .5 * this.#sqrt2 * b;
 		let yModifier = (dy < 0 ? -1 : 1);
 		if (dx < 0) yModifier *= -1;
-		let by = .5 * Math.sqrt(2) * b * yModifier;
+		let by = .5 * this.#sqrt2 * b * yModifier;
+
 		
 		let a = (dx - bx * 2) / 2;
 		let c = (dy - by * 2);
