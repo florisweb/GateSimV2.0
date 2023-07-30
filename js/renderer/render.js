@@ -44,7 +44,12 @@ class _Renderer {
 
 	renderWorldNodes() {
 		let nodes = [...World.component.inputs, ...World.component.outputs]
-		for (let node of nodes) this.renderNode(node);
+		for (let node of nodes) 
+		{
+			this.renderNode(node);
+			if (!node.toggleButton) continue;
+			this.renderToggleButton(node.toggleButton);
+		}
 	}	
 
 
@@ -80,6 +85,21 @@ class _Renderer {
 			position: _node.position.copy().add(new Vector(0, this.NodeSize * 1.5)),
 			color: '#eee',
 			fontSize: 15
+		})
+	}
+
+	renderToggleButton(_button) {
+		this.#drawRect({
+			position: _button.position,
+			diagonal: _button.size,
+			fillColor: '#333',
+			strokeColor: '#777'
+		});
+		this.#drawCenteredText({
+			text: "TOGGLE",
+			position: _button.position.copy().add(_button.size.copy().scale(.5)),
+			color: '#eee',
+			fontSize: 10
 		})
 	}
 

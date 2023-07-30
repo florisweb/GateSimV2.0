@@ -105,6 +105,7 @@ class OutputNode extends Node {
 
 
 class WorldInputNode extends InputNode {
+	toggleButton = new ToggleInputButton(this);
 	get position() {
 		let pos = super.position;
 		pos.value[0] = 50;
@@ -113,6 +114,31 @@ class WorldInputNode extends InputNode {
 
 	value = true;
 	calcValue() {return this.value}
+	constructor() {
+		super(...arguments);
+	}
+
+}
+
+class ToggleInputButton {
+	#parent;
+	type = 'button';
+	hitBox;
+	size = new Vector(60, 25);
+	offset = new Vector(-30, 25 / 2);
+
+	get position() {
+		return this.#parent.position.copy().add(this.offset).add(this.size.copy().scale(-1));
+	}
+
+	constructor(_parent) {
+		this.#parent = _parent;
+		this.hitBox = new RectangularHitBox({diagonal: this.size}, this);
+	}
+	onClick() {
+		this.#parent.value = !this.#parent.value;
+		Runner.runViaPaths();
+	}
 }
 
 

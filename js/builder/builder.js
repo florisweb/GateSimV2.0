@@ -15,9 +15,12 @@ class _Builder {
 		let selectedSomething = this.selectItemAt(_worldPos);
 		let hitBox = HitBoxManager.getItemByPosition(_worldPos);
 		let item = hitBox.parent;
-
+		console.log('click', item, _worldPos.value);
 		if (item)
 		{
+			if (item.type === 'button') return item.onClick();
+
+
 			let isBuilding = this.handleLineBuildClicks(item);
 			if (isBuilding) return;
 			if (selectedSomething) return;

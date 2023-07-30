@@ -148,8 +148,9 @@ class _KeyHandler {
 			keys: ["Backspace"], 
 			event: async function () {
 				if (!Builder.selectedItems.length) return;
-				for (let item of Builder.selectedItems)
+				for (let i = Builder.selectedItems.length - 1; i >= 0; i--)
 				{
+					let item = Builder.selectedItems[i];
 					if (item.isNode) continue;
 					item.remove();
 				}
