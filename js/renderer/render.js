@@ -14,6 +14,7 @@ class _Renderer {
 		this.camera = new _Camera();
 	}
 	setup() {
+		this.camera.setup();
 		window.onresize();
 	}
 
@@ -32,13 +33,14 @@ class _Renderer {
 				this.renderLine(item);
 			}
 		}
-		this.renderWorldNodes();
-
 
 		for (let line of Builder.buildLines)
 		{
 			this.renderLine(line);
 		}
+		
+		this.renderWorldNodes();
+		this.renderWorldInOutPutButtons();
 
 
 		if (this.renderHitBoxes) for (let hb of HitBoxManager.list) this.renderHitBox(hb);
@@ -46,6 +48,26 @@ class _Renderer {
 		requestAnimationFrame(() => this.render());
 	}
 
+
+
+	renderWorldInOutPutButtons() {
+		for (let node of World.component.inOutPutCountChangers) 
+		{
+			this.#drawCircle({
+				position: node.position,
+				radius: node.radius, 
+				fillColor: node.isAddButton ? '#0a0' : '#a00',
+				strokeColor: node.isAddButton ? '#050' : '#500',
+			});
+			this.#drawCenteredText({
+				text: node.isAddButton ? '+' : '-',
+				position: node.isAddButton ? node.position : node.position.copy().add(new Vector(0, -2)),
+				color: '#eee',
+				fontSize: 25
+			});
+
+		}
+	}
 
 	renderWorldNodes() {
 		let nodes = [...World.component.inputs, ...World.component.outputs]

@@ -174,10 +174,17 @@ class Component extends BaseComponent {
 
 
 class WorldComponent extends Component {
+	size = new Vector(950, 950);
 	type = 'WorldComponent';
-	get size() {
-		return World.size;
-	}
+	inOutPutCountChangers = [
+		new ChangeNodeCountButton(true, true),
+		new ChangeNodeCountButton(true, false),
+		new ChangeNodeCountButton(false, true),
+		new ChangeNodeCountButton(false, false),
+	];
+
+
+
 
 	_setup({inputs, outputs} = {inputs: [], outputs: []}) {
 		for (let i = 0; i < inputs.length; i++) this.inputs.push(new WorldInputNode({index: i, name: inputs[i].name}, this));

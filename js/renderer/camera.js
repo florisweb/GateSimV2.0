@@ -16,9 +16,8 @@ class _Camera {
 		this.#zoom = Math.min(Math.max(_zoom, this.#minZoom), this.#maxZoom);
 	}
 
-
-	constructor() {
-		this.position = World.size.copy(0).scale(.5);
+	setup() {
+		this.position = World.component.size.copy(0).scale(.5);
 	}
 	
 

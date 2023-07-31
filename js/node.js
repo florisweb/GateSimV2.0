@@ -108,7 +108,7 @@ class WorldInputNode extends InputNode {
 	toggleButton = new ToggleInputButton(this);
 	get position() {
 		let pos = super.position;
-		pos.value[0] = 50;
+		pos.value[0] = 0;
 		return pos;
 	}
 
@@ -122,32 +122,12 @@ class WorldInputNode extends InputNode {
 
 }
 
-class ToggleInputButton {
-	#parent;
-	type = 'button';
-	hitBox;
-	size = new Vector(60, 25);
-	offset = new Vector(-30, 25 / 2);
-
-	get position() {
-		return this.#parent.position.copy().add(this.offset).add(this.size.copy().scale(-1));
-	}
-
-	constructor(_parent) {
-		this.#parent = _parent;
-		this.hitBox = new RectangularHitBox({diagonal: this.size}, this);
-	}
-	onClick() {
-		this.#parent.value = !this.#parent.value;
-		Runner.runViaPaths();
-	}
-}
 
 
 class WorldOutputNode extends OutputNode {
 	get position() {
 		let pos = super.position;
-		pos.value[0] = World.size.value[0];
+		pos.value[0] = World.component. size.value[0];
 		return pos;
 	}
 	constructor() {
@@ -156,6 +136,86 @@ class WorldOutputNode extends OutputNode {
 	}
 }
 
+
+
+
+class Button {
+	_parent;
+	type = 'button';
+	hitBox;
+
+	get position() {
+		return new Vector(0, 0);
+	}
+
+	constructor(_parent) {
+		this._parent = _parent;
+	}
+
+	onClick() {}
+}
+
+
+
+
+class ToggleInputButton extends Button {
+	size = new Vector(60, 25);
+	offset = new Vector(-30, 25 / 2);
+
+	get position() {
+		return this._parent.position.copy().add(this.offset).add(this.size.copy().scale(-1));
+	}
+
+	constructor(_parent) {
+		super(_parent);
+		this.hitBox = new RectangularHitBox({diagonal: this.size}, this);
+	}
+	onClick() {
+		this._parent.value = !this._parent.value;
+		Runner.runViaPaths();
+	}
+}
+
+class ChangeNodeCountButton extends Button {
+	radius = Renderer.NodeSize;
+	isAddButton = true;
+	#isInputButton = false;
+
+	get position() {
+		let nodeCount = World.component.inputs.length;
+		if (!this.#isInputButton) nodeCount = World.component.outputs.length;
+		let index = this.isAddButton ? nodeCount - .2 : -.8;
+
+		let deltaFromCenter = index - (nodeCount - 1) / 2;
+		return new Vector(
+			this.#isInputButton ? 0 : World.component.size.value[0], 
+			World.component.size.value[1] / 2 + deltaFromCenter * Renderer.NodeMargin,
+		);
+	}
+
+	constructor(_isInputButton, _isAddButton) {
+		super();
+		this.isAddButton = _isAddButton;
+		this.#isInputButton = _isInputButton;
+		this.hitBox = new CircularHitBox({radius: this.radius}, this);
+		this.hitBox.enable();
+	}
+
+	onClick() {
+		let nodes = World.component.inputs;
+		let constructor = WorldInputNode
+		if (!this.#isInputButton) 
+		{
+			nodes = World.component.outputs;
+			constructor = WorldOutputNode
+		}
+
+		if (this.isAddButton) return nodes.push(new constructor({index: nodes.length, name: ''}, World.component));
+		let node = nodes.pop();
+		let lines = [...node.linesTo, ...node.linesFrom];
+		for (let line of lines) line.remove();
+	}
+}
 
 
 

@@ -14,19 +14,22 @@ let ComponentPanel;
 
 
 const World = new class {
-	size = new Vector(950, 950);
-
 	nodes = [];
-
-
-
 	component;
 
 	async setup() {
-		ComponentManager = new _ComponentManager();
-		HitBoxManager = new _HitBoxManager();
-		Builder = new _Builder();
 		Renderer = new _Renderer();
+		HitBoxManager = new _HitBoxManager();
+
+		this.component = new WorldComponent({
+			inputs: [{name: 'input 1'}, {name: 'input 2'}],
+			outputs: [{name: 'output 1'}, {name: 'output 2'}],
+			content: []
+		});
+
+
+		ComponentManager = new _ComponentManager();
+		Builder = new _Builder();
 		InputHandler = new _InputHandler({canvas: Renderer.canvas});
 		KeyHandler = new _KeyHandler();
 		Header = new _Header();
@@ -205,14 +208,6 @@ const World = new class {
 		// const finishNodeB = new OutputNode();
 		// this.outputs.push(finishNodeB);
 		// finishNodeB.name = 'Finish B';
-
-
-
-		this.component = new WorldComponent({
-			inputs: [{name: 'input 1'}, {name: 'input 2'}, {name: 'input 3'}, {name: 'input 4'}, {name: 'input 5'}],
-			outputs: [{name: 'output 1'}, {name: 'output 2'}, {name: 'output 3'}, {name: 'output 4'}, {name: 'input 5'}],
-			content: []
-		});
 
 
 
