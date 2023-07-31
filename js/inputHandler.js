@@ -134,7 +134,7 @@ class _InputHandler {
 
 
 class _KeyHandler {
-	keys = [];
+	keys = {};
 	shortCuts = [
 		{
 			keys: ["Escape"], 
@@ -159,6 +159,15 @@ class _KeyHandler {
 			},
 			ignoreIfInInputField: true
 		},
+		{
+			keys: ["Meta", 'a'], 
+			event: function (_event) {
+				Builder.selectedItems = World.component.content.filter((_item) => !(_item instanceof Line));
+				_event.preventDefault();
+				
+			},
+			ignoreIfInInputField: true
+		},
 	];
 
 	get shiftPressed() {
@@ -169,6 +178,7 @@ class _KeyHandler {
 		window.addEventListener("keydown", _e => {
 			this.keys[_e.key] = true;
 			this.handleKeys(_e);
+			console.log(this.keys);
 		});
 
 		window.addEventListener("keyup", _e => {
