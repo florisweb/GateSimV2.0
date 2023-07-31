@@ -112,7 +112,7 @@ class WorldInputNode extends InputNode {
 		return pos;
 	}
 
-	value = true;
+	value = false;
 	calcValue() {return this.value}
 	constructor() {
 		super(...arguments);

@@ -12,17 +12,17 @@ const Runner = new class {
 		this.paths.push(_path);
 	}
 
-	evaluatePaths() {
+	async evaluatePaths() {
 		this.paths = [];
-		for (let input of World.component.inputs)
-		{
-			input.evaluatePaths();
-		}
+		let start = new Date();
+		console.warn('[Runner] Evaluating Paths...');
+		for (let input of World.component.inputs) input.evaluatePaths();;
+		console.warn('[Runner] Finished Evaluating Paths, took ' + (new Date() - start) + ' ms');
 	}
 
 	run() {
 		let start = new Date();
-		this.runViaPaths(this.runs === 0);
+		this.runViaPaths();
 		if (this.logRunStats) console.log('Finished running 1 round:', new Date() - start + 'ms', this.runs);
 
 		setTimeout(() => this.run(), 1000);
@@ -81,6 +81,34 @@ const Runner = new class {
 
 	#removePath(_path) {
 		this.#curPaths.splice(this.#curPaths.findIndex((p) => p === _path), 1);
+	}
+
+
+
+	async createTruthTable() {
+		let data = {};
+
+		let maxIndex = Math.pow(2, World.component.inputs.length);
+		let binaryTemplate = World.component.inputs.map(a => '0').join('');
+		for (let i = 0; i < maxIndex; i++)
+		{
+			let subBinary = i.toString(2);
+			let binary = binaryTemplate.substr(subBinary.length, 1000) + subBinary;
+
+			for (let p = 0; p < World.component.inputs.length; p++)
+			{
+				let on = binary[p] === '1' ? true : false;
+				World.component.inputs[p].value = on;
+			}
+
+			this.runViaPaths();
+			await wait(0);
+
+			data[binary] = World.component.outputs.map(r => r.value ? '1' : '0').join('');
+		}
+
+		return data;
+
 	}
 }
 
