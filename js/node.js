@@ -116,6 +116,8 @@ class WorldInputNode extends InputNode {
 	calcValue() {return this.value}
 	constructor() {
 		super(...arguments);
+		this.hitBox.enable();
+		this.toggleButton.hitBox.enable();
 	}
 
 }
@@ -147,6 +149,10 @@ class WorldOutputNode extends OutputNode {
 		let pos = super.position;
 		pos.value[0] = World.size.value[0];
 		return pos;
+	}
+	constructor() {
+		super(...arguments);
+		this.hitBox.enable();
 	}
 }
 

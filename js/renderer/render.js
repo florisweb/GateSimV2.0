@@ -3,6 +3,7 @@ class _Renderer {
 	NodeSize = 15;
 	NodeMargin = 70;
 
+	renderHitBoxes = false;
 
 
 	canvas = canvas;
@@ -38,6 +39,9 @@ class _Renderer {
 		{
 			this.renderLine(line);
 		}
+
+
+		if (this.renderHitBoxes) for (let hb of HitBoxManager.list) this.renderHitBox(hb);
 
 		requestAnimationFrame(() => this.render());
 	}
@@ -110,6 +114,24 @@ class _Renderer {
 			fontSize: 10
 		})
 	}
+
+
+
+	renderHitBox(_hitBox) {
+		if (_hitBox instanceof RectangularHitBox) 
+		{
+			this.#drawRect({
+				position: _hitBox.position.copy(), 
+				diagonal: _hitBox.diagonal.copy(), 
+				strokeColor: '#0f0'
+			})
+		} else this.#drawCircle({
+				position: _hitBox.position.copy(), 
+				radius: Math.sqrt(_hitBox.radiusSquared),
+				strokeColor: '#0f0'
+			});
+	}
+
 
 
 

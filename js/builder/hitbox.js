@@ -52,6 +52,8 @@ class BaseHitbox {
 	id = newId();
 	parent;
 	offset = new Vector(0, 0);
+	enabled = false;
+
 	get position() {
 		return this.parent.position.copy().add(this.offset);
 	}
@@ -61,11 +63,15 @@ class BaseHitbox {
 	constructor({offset}, _parent) {
 		this.parent = _parent;
 		if (offset) this.offset = offset;
-		HitBoxManager.register(this);
 	}
 
+	enable() {
+		HitBoxManager.register(this);
+		this.enabled = true;
+	}
 	remove() {
 		HitBoxManager.unregister(this.id);
+		this.enabled = false;
 	}
 }
 

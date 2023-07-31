@@ -13,6 +13,14 @@ class BaseComponent {
 	get selected() {
 		return Builder.selectedItems.findIndex((item) => item.id === this.id) !== -1;
 	}
+	get masterParent() {
+		if (this.parent) return this.parent.masterParent;
+		return this;
+	}
+	get depth() {
+		if (this.parent) return this.parent.depth + 1;
+		return 0;
+	}
 
 
 
@@ -42,6 +50,12 @@ class BaseComponent {
 
 	setParent(_parent) {
 		this.parent = _parent;
+		
+		if (!(this.masterParent instanceof WorldComponent)) return;
+		if (this.depth > 1) return;
+		this.hitBox.enable();
+		let nodes = [...this.inputs, ...this.outputs];
+		for (let node of nodes) node.hitBox.enable();
 	}
 
 
@@ -187,7 +201,6 @@ class WorldComponent extends Component {
 class NandGate extends BaseComponent {
 	type = 'Nand';
 	name = 'NandGate';
-	size = new Vector(170, 120);
 	inputs = [
 		new NandInputNode({index: 0}, this),
 		new NandInputNode({index: 1}, this),
@@ -198,6 +211,7 @@ class NandGate extends BaseComponent {
 
 	constructor({relativePosition} = {relativePosition: new Vector(0, 0)}) {
 		super(...arguments);
+		this.size.value = [170, 120]; // Set its value to keep the references intact
 	}
 }
 
