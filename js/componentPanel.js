@@ -20,8 +20,17 @@ class _ComponentPanel {
 
 	#renderComponent(_comp) {
 		let element = createElement('div', 'listItem');
-		setTextToElement(element, _comp.name + ' (' + _comp.inputs.length + ' / ' + _comp.outputs.length + ')');
+		element.innerHTML = `
+			<div class='nameHolder'></div>
+			<div class='buttonHolder'>
+				<div class='button removeButton'>X</div>
+			</div>
+		`;
+		const nameHolder = element.children[0];
+		const buttonHolder = element.children[1];
 
+
+		setTextToElement(nameHolder, _comp.name + ' (' + _comp.inputs.length + ' / ' + _comp.outputs.length + ')');
 		element.addEventListener('click', () => {
 			let newComp;
 			if (_comp instanceof NandGate)
@@ -32,6 +41,11 @@ class _ComponentPanel {
 
 			newComp.relativePosition = Renderer.camera.position.copy();
 			World.component.addComponent(newComp);
+		});
+
+		buttonHolder.children[0].addEventListener('click', () => {
+			console.log(_comp.componentId, 'remove');
+			ComponentManager.removeComponent(_comp.componentId);
 		});
 		return element;
 	}

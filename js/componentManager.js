@@ -34,6 +34,11 @@ class _ComponentManager {
 		localStorage.components = JSON.stringify(this.#components);
 		ComponentPanel.update();
 	}
+	removeComponent(_id) {
+		this.#components = this.#components.filter((_comp) => _comp.componentId !== _id);
+		localStorage.components = JSON.stringify(this.#components);
+		ComponentPanel.update();
+	}
 
 	createComponentFromId(_id) {
 		let compTemplate = this.#components.find((_comp) => _comp.componentId === _id);
